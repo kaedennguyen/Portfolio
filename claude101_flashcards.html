@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Claude 101 — Study Deck</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+:root{
+  --paper: #F6F1E4;
+  --card-stock: #EFE4C8;
+  --card-stock-dark: #E2D4AC;
+  --ink: #1F3A5F;
+  --ink-soft: #3C5675;
+  --brass: #B98A2E;
+  --brass-dark: #8C6A22;
+  --stamp: #8B3A3A;
+  --stamp-glow: rgba(139,58,58,0.18);
+  --line: #C9B98A;
+  --shadow: rgba(31,58,95,0.18);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    linear-gradient(var(--line) 1px, transparent 1px) 0 28px / 100% 29px,
+    var(--paper);
+  font-family:'IBM Plex Sans', sans-serif;
+  color:var(--ink);
+  min-height:100vh;
+  padding:28px 16px 60px;
+}
+
+.wrap{max-width:640px;margin:0 auto;}
+
+/* ---- Header: catalog drawer label ---- */
+.header{
+  text-align:center;
+  margin-bottom:22px;
+}
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--brass-dark);
+  margin-bottom:6px;
+}
+.title{
+  font-family:'Fraunces', serif;
+  font-size:34px;
+  font-weight:600;
+  font-variation-settings: 'opsz' 40;
+  color:var(--ink);
+  margin:0 0 4px;
+}
+.subtitle{
+  font-size:13.5px;
+  color:var(--ink-soft);
+  max-width:440px;
+  margin:0 auto;
+  line-height:1.5;
+}
+
+/* ---- Drawer tabs (categories) ---- */
+.tabs{
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  padding:4px 2px 12px;
+  margin-bottom:6px;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  flex:0 0 auto;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11.5px;
+  letter-spacing:0.03em;
+  padding:8px 12px 7px;
+  background:var(--card-stock);
+  border:1px solid var(--line);
+  border-bottom:none;
+  border-radius:6px 6px 0 0;
+  color:var(--ink-soft);
+  cursor:pointer;
+  position:relative;
+  top:1px;
+  white-space:nowrap;
+  transition:background .15s, color .15s;
+}
+.tab .n{color:var(--brass-dark); margin-right:5px;}
+.tab.active{
+  background:var(--paper);
+  color:var(--ink);
+  font-weight:600;
+  border-color:var(--ink);
+  border-bottom:1px solid var(--paper);
+}
+.tab:not(.active):hover{background:var(--card-stock-dark);}
+
+/* ---- Progress rail ---- */
+.progress-rail{
+  border:1px solid var(--ink);
+  border-radius:0 8px 8px 8px;
+  background:var(--paper);
+  padding:14px 16px;
+  margin-bottom:22px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.progress-track{
+  flex:1;
+  height:8px;
+  border-radius:4px;
+  background:var(--card-stock-dark);
+  overflow:hidden;
+  position:relative;
+}
+.progress-fill{
+  height:100%;
+  background:var(--brass);
+  border-radius:4px;
+  transition:width .35s ease;
+}
+.progress-label{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  color:var(--ink-soft);
+  white-space:nowrap;
+}
+
+/* ---- Flashcard ---- */
+.stage{
+  perspective:1600px;
+  margin-bottom:18px;
+}
+.card{
+  position:relative;
+  width:100%;
+  min-height:260px;
+  transform-style:preserve-3d;
+  transition:transform .5s cubic-bezier(.4,.2,.2,1);
+  cursor:pointer;
+}
+.card.flipped{transform:rotateY(180deg);}
+.face{
+  position:absolute;
+  inset:0;
+  backface-visibility:hidden;
+  border-radius:10px;
+  border:1px solid var(--ink);
+  background:var(--card-stock);
+  box-shadow:0 10px 24px -8px var(--shadow), 0 2px 0 var(--card-stock-dark) inset;
+  padding:28px 26px;
+  display:flex;
+  flex-direction:column;
+}
+.face::before{
+  content:'';
+  position:absolute;
+  top:16px; left:16px; right:16px; bottom:16px;
+  border:1px dashed var(--line);
+  border-radius:6px;
+  pointer-events:none;
+}
+.face-tag{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:10.5px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--brass-dark);
+  margin-bottom:14px;
+}
+.face-body{
+  flex:1;
+  display:flex;
+  align-items:center;
+  font-family:'Fraunces', serif;
+  font-size:22px;
+  line-height:1.4;
+  color:var(--ink);
+}
+.face.back{transform:rotateY(180deg);}
+.face.back .face-body{font-family:'IBM Plex Sans', sans-serif; font-size:16.5px; font-weight:400; line-height:1.6;}
+.hint{
+  text-align:center;
+  font-size:11.5px;
+  color:var(--ink-soft);
+  font-family:'IBM Plex Mono', monospace;
+  opacity:0.7;
+  margin-bottom:20px;
+}
+
+/* ---- Mastery stamp ---- */
+.stamp{
+  position:absolute;
+  top:14px; right:16px;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:0.1em;
+  color:var(--stamp);
+  border:2px solid var(--stamp);
+  border-radius:4px;
+  padding:3px 8px;
+  transform:rotate(8deg) scale(0);
+  transition:transform .3s cubic-bezier(.4,1.6,.5,1);
+  background:var(--stamp-glow);
+}
+.stamp.show{transform:rotate(8deg) scale(1);}
+
+/* ---- Controls ---- */
+.controls{
+  display:flex;
+  gap:10px;
+  margin-bottom:10px;
+}
+.btn{
+  flex:1;
+  font-family:'IBM Plex Sans', sans-serif;
+  font-size:14px;
+  font-weight:600;
+  padding:12px 14px;
+  border-radius:7px;
+  border:1px solid var(--ink);
+  background:var(--paper);
+  color:var(--ink);
+  cursor:pointer;
+  transition:transform .1s, background .15s;
+}
+.btn:active{transform:scale(0.97);}
+.btn.primary{
+  background:var(--ink);
+  color:var(--paper);
+}
+.btn.gold{
+  background:var(--brass);
+  border-color:var(--brass-dark);
+  color:#2A1F08;
+}
+.btn:hover{filter:brightness(1.04);}
+.utility-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  color:var(--ink-soft);
+  margin-top:6px;
+}
+.link-btn{
+  background:none;
+  border:none;
+  color:var(--ink-soft);
+  text-decoration:underline;
+  cursor:pointer;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  padding:0;
+}
+.link-btn:hover{color:var(--ink);}
+
+/* ---- Completion banner ---- */
+.done-banner{
+  border:1px solid var(--ink);
+  background:var(--card-stock);
+  border-radius:10px;
+  padding:26px;
+  text-align:center;
+  font-family:'Fraunces', serif;
+}
+.done-banner .big{font-size:24px; margin-bottom:8px;}
+.done-banner .small{font-family:'IBM Plex Sans',sans-serif; font-size:13.5px; color:var(--ink-soft);}
+
+/* ---- Overall stats footer ---- */
+.footer-note{
+  text-align:center;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  color:var(--ink-soft);
+  opacity:0.7;
+  margin-top:26px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .card, .stamp, .progress-fill{transition:none !important;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="eyebrow">Card Catalog · Vol. 101</div>
+    <h1 class="title">Claude 101 Study Deck</h1>
+    <p class="subtitle">Flip through the ideas behind Anthropic's Claude&nbsp;101 certification — one drawer per topic, one card at a time.</p>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="progress-rail">
+    <div class="progress-label" id="progressLabel">0 / 0</div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressPct">0%</div>
+  </div>
+
+  <div id="deckArea"></div>
+
+  <div class="footer-note" id="overallNote">loading your deck…</div>
+</div>
+
+<script>
+const CATEGORIES = [
+  {
+    id: "meet",
+    label: "Meet Claude",
+    cards: [
+      {q:"What are the three main ways to work with Claude day-to-day?", a:"Chat for conversation and quick questions, Cowork for multi-step agentic work across files and tasks, and Code for delegating software development work."},
+      {q:"When should you reach for Cowork instead of Chat?", a:"When a task spans many steps, files, and tool calls — research, analysis, or long-form work — rather than a single question and answer."},
+      {q:"What is Claude Code built for?", a:"Delegating coding tasks — writing, debugging, and shipping code — from the terminal, an IDE, or the desktop app."}
+    ]
+  },
+  {
+    id: "projects",
+    label: "Projects & Artifacts",
+    cards: [
+      {q:"What is a Project in Claude?", a:"A persistent workspace that holds context, instructions, and files so Claude stays consistent across many related conversations."},
+      {q:"What is an Artifact?", a:"A standalone piece of content — a document, piece of code, diagram, or app — that Claude creates and that can be viewed, edited, and reused outside the chat."},
+      {q:"Why use a Project for recurring work?", a:"It keeps the same background knowledge and style available every time, so you don't have to re-explain context in every new chat."}
+    ]
+  },
+  {
+    id: "skills",
+    label: "Skills",
+    cards: [
+      {q:"What is a Skill in Claude?", a:"A packaged set of instructions and know-how for a specific task or format, so Claude reuses a tested workflow instead of relearning it each time."},
+      {q:"How does a Skill differ from a one-off prompt?", a:"A Skill is saved, reusable, and shareable across a team, while a one-off prompt only helps in the current conversation."},
+      {q:"Give an example of what a Skill might encode.", a:"Best practices for producing a specific file type — like the formatting rules for a polished Word document or slide deck."}
+    ]
+  },
+  {
+    id: "connectors",
+    label: "Connectors",
+    cards: [
+      {q:"What is a Connector?", a:"An integration that lets Claude read from — and act on — an external app or service, like email, files, or messaging, on your behalf."},
+      {q:"Name three common services people connect to Claude.", a:"Gmail, Google Drive, and Slack are common examples."},
+      {q:"What's the difference between a read-only tool and an action tool?", a:"Read-only tools, like search, can run automatically. Tools that send, modify, or delete something usually ask for confirmation first."}
+    ]
+  },
+  {
+    id: "research",
+    label: "Research & Search",
+    cards: [
+      {q:"What does Research mode do?", a:"It runs many searches and tool calls across sources to build a thorough answer to a broad or open-ended question."},
+      {q:"What is Enterprise Search for?", a:"Searching across a company's own connected knowledge — documents, tickets, chats — instead of the open web."},
+      {q:"When should you prefer one quick search over Research mode?", a:"When the question has a single clear factual answer, like a current price or a specific date."}
+    ]
+  },
+  {
+    id: "models",
+    label: "Choosing a Model",
+    cards: [
+      {q:"What are the three model sizes to choose between?", a:"Opus (most capable), Sonnet (balanced), and Haiku (fastest and most cost-efficient)."},
+      {q:"When is Haiku the right choice?", a:"For simple, high-volume, low-latency tasks where speed and cost matter more than maximum depth."},
+      {q:"When is Opus the right choice?", a:"For the hardest, highest-stakes tasks that need the most careful reasoning."},
+      {q:"What's a practical reason to pick Sonnet for everyday work?", a:"It balances quality with speed and cost for most day-to-day tasks, saving Opus for the hardest problems."}
+    ]
+  },
+  {
+    id: "permissions",
+    label: "Permissions & Data",
+    cards: [
+      {q:"Why do permissions matter when connecting Claude to your tools?", a:"They control exactly what Claude can see and do in each app, limiting access to what's needed for the task at hand."},
+      {q:"What should you do before an agent takes an irreversible action, like sending an email?", a:"Review and confirm it — actions that send, modify, or delete are typically gated behind a confirmation step."}
+    ]
+  }
+];
+
+let currentCat = 0;
+let currentIdx = 0;
+let flipped = false;
+let order = [];
+let progress = {}; // {catId: [masteredIndexes]}
+const STORAGE_KEY = "claude101-progress-v1";
+
+async function loadProgress(){
+  try{
+    const res = await window.storage.get(STORAGE_KEY, false);
+    if(res && res.value){ progress = JSON.parse(res.value); }
+  }catch(e){ progress = {}; }
+  CATEGORIES.forEach(c => { if(!progress[c.id]) progress[c.id] = []; });
+}
+async function saveProgress(){
+  try{ await window.storage.set(STORAGE_KEY, JSON.stringify(progress), false); }
+  catch(e){ console.error("save failed", e); }
+}
+
+function shuffleOrder(len){
+  const arr = Array.from({length: len}, (_,i)=>i);
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function renderTabs(){
+  const tabsEl = document.getElementById("tabs");
+  tabsEl.innerHTML = "";
+  CATEGORIES.forEach((c, i) => {
+    const mastered = progress[c.id]?.length || 0;
+    const tab = document.createElement("div");
+    tab.className = "tab" + (i===currentCat ? " active" : "");
+    tab.innerHTML = `<span class="n">${String(i+1).padStart(2,'0')}</span>${c.label} (${mastered}/${c.cards.length})`;
+    tab.onclick = () => { currentCat = i; currentIdx = 0; flipped = false; order = shuffleOrder(CATEGORIES[i].cards.length); render(); };
+    tabsEl.appendChild(tab);
+  });
+}
+
+function renderProgress(){
+  const cat = CATEGORIES[currentCat];
+  const masteredSet = new Set(progress[cat.id] || []);
+  const total = cat.cards.length;
+  const done = masteredSet.size;
+  const pct = total ? Math.round((done/total)*100) : 0;
+  document.getElementById("progressLabel").textContent = `${cat.label}: ${done} / ${total} mastered`;
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressPct").textContent = pct + "%";
+
+  const totalAll = CATEGORIES.reduce((s,c)=>s+c.cards.length,0);
+  const doneAll = CATEGORIES.reduce((s,c)=>s+(progress[c.id]?.length||0),0);
+  document.getElementById("overallNote").textContent = `Overall: ${doneAll} / ${totalAll} cards mastered across all 7 drawers`;
+}
+
+function render(){
+  renderTabs();
+  renderProgress();
+  const cat = CATEGORIES[currentCat];
+  const deckArea = document.getElementById("deckArea");
+  const masteredSet = new Set(progress[cat.id] || []);
+
+  if(order.length !== cat.cards.length){ order = shuffleOrder(cat.cards.length); }
+
+  // If all cards mastered in this category, show completion banner
+  if(masteredSet.size === cat.cards.length){
+    deckArea.innerHTML = `
+      <div class="done-banner">
+        <div class="big">🗂️ Drawer complete</div>
+        <div class="small">You've mastered every card in "${cat.label}." Nice work.</div>
+      </div>
+      <div class="controls" style="margin-top:14px;">
+        <button class="btn" id="reviewBtn">Review this drawer again</button>
+        <button class="btn primary" id="nextCatBtn">Next drawer →</button>
+      </div>
+    `;
+    document.getElementById("reviewBtn").onclick = () => {
+      progress[cat.id] = [];
+      saveProgress();
+      currentIdx = 0;
+      order = shuffleOrder(cat.cards.length);
+      render();
+    };
+    document.getElementById("nextCatBtn").onclick = () => {
+      currentCat = (currentCat + 1) % CATEGORIES.length;
+      currentIdx = 0;
+      flipped = false;
+      order = shuffleOrder(CATEGORIES[currentCat].cards.length);
+      render();
+    };
+    return;
+  }
+
+  // Skip to next unmastered card in order
+  let safety = 0;
+  while(masteredSet.has(order[currentIdx]) && safety < order.length + 2){
+    currentIdx = (currentIdx + 1) % order.length;
+    safety++;
+  }
+
+  const realIdx = order[currentIdx];
+  const cardData = cat.cards[realIdx];
+  const isMastered = masteredSet.has(realIdx);
+
+  deckArea.innerHTML = `
+    <div class="stage">
+      <div class="card" id="flashcard">
+        <div class="face front">
+          <div class="face-tag">Question · ${cat.label}</div>
+          <div class="face-body">${cardData.q}</div>
+          ${isMastered ? '<div class="stamp show">MASTERED</div>' : ''}
+        </div>
+        <div class="face back">
+          <div class="face-tag">Answer</div>
+          <div class="face-body">${cardData.a}</div>
+        </div>
+      </div>
+    </div>
+    <div class="hint">tap the card to flip</div>
+    <div class="controls">
+      <button class="btn" id="againBtn">Study again</button>
+      <button class="btn gold" id="gotItBtn">Got it ✓</button>
+    </div>
+    <div class="utility-row">
+      <button class="link-btn" id="shuffleBtn">⟲ shuffle drawer</button>
+      <span>card ${currentIdx+1} of ${cat.cards.length}</span>
+      <button class="link-btn" id="resetBtn">reset drawer</button>
+    </div>
+  `;
+
+  const cardEl = document.getElementById("flashcard");
+  cardEl.classList.toggle("flipped", flipped);
+  cardEl.onclick = () => { flipped = !flipped; cardEl.classList.toggle("flipped", flipped); };
+
+  document.getElementById("gotItBtn").onclick = (e) => {
+    e.stopPropagation();
+    if(!progress[cat.id].includes(realIdx)){ progress[cat.id].push(realIdx); }
+    saveProgress();
+    flipped = false;
+    currentIdx = (currentIdx + 1) % order.length;
+    render();
+  };
+  document.getElementById("againBtn").onclick = (e) => {
+    e.stopPropagation();
+    flipped = false;
+    currentIdx = (currentIdx + 1) % order.length;
+    render();
+  };
+  document.getElementById("shuffleBtn").onclick = (e) => {
+    e.stopPropagation();
+    order = shuffleOrder(cat.cards.length);
+    currentIdx = 0;
+    flipped = false;
+    render();
+  };
+  document.getElementById("resetBtn").onclick = (e) => {
+    e.stopPropagation();
+    progress[cat.id] = [];
+    saveProgress();
+    currentIdx = 0;
+    flipped = false;
+    order = shuffleOrder(cat.cards.length);
+    render();
+  };
+}
+
+(async function init(){
+  await loadProgress();
+  order = shuffleOrder(CATEGORIES[currentCat].cards.length);
+  render();
+})();
+</script>
+</body>
+</html>
