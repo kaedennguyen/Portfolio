@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valley Community Food Bank — Grant Scanner</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+  --ink:#1F3A2E;
+  --ink-light:#2E4F3D;
+  --paper:#F5EFE0;
+  --paper-dim:#EDE5D0;
+  --gold:#C89B3C;
+  --high:#3E6E4F;
+  --high-bg:#E3EEE3;
+  --med:#B8863A;
+  --med-bg:#F5EAD3;
+  --low:#A34B3E;
+  --low-bg:#F3E2DD;
+  --text:#332B22;
+  --text-soft:#665C4D;
+  --line:#D9CFB8;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- HEADER ---------- */
+header{
+  background:var(--ink);
+  color:var(--paper);
+  padding:36px 28px 30px;
+  position:relative;
+  overflow:hidden;
+}
+header::after{
+  content:"";
+  position:absolute;
+  right:-40px; top:-60px;
+  width:220px;height:220px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(200,155,60,0.18) 0%, transparent 70%);
+}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:10px;
+}
+h1{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  font-size:clamp(26px,4vw,38px);
+  margin:0 0 8px;
+  letter-spacing:-0.01em;
+}
+.org-line{
+  font-size:14px;
+  color:#C9D6CB;
+  max-width:640px;
+  line-height:1.5;
+  margin-bottom:22px;
+}
+.stat-row{
+  display:flex;
+  gap:28px;
+  flex-wrap:wrap;
+  border-top:1px solid rgba(255,255,255,0.15);
+  padding-top:18px;
+}
+.stat{ min-width:90px; }
+.stat .num{
+  font-family:'Fraunces',serif;
+  font-size:26px;
+  font-weight:600;
+  color:var(--gold);
+  line-height:1;
+}
+.stat .lbl{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  color:#B7C6BA;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  margin-top:4px;
+}
+
+/* ---------- CONTROLS ---------- */
+.controls{
+  position:sticky; top:0; z-index:10;
+  background:var(--paper);
+  border-bottom:1px solid var(--line);
+  padding:14px 28px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.filter-btn{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  letter-spacing:0.03em;
+  padding:8px 14px;
+  border-radius:20px;
+  border:1px solid var(--line);
+  background:var(--paper);
+  color:var(--text-soft);
+  cursor:pointer;
+  transition:all .15s ease;
+}
+.filter-btn:hover{ border-color:var(--ink); color:var(--ink); }
+.filter-btn.active{
+  background:var(--ink);
+  color:var(--paper);
+  border-color:var(--ink);
+}
+.filter-btn .dot{
+  display:inline-block;
+  width:7px;height:7px;
+  border-radius:50%;
+  margin-right:6px;
+}
+#searchBox{
+  margin-left:auto;
+  font-family:'Inter',sans-serif;
+  font-size:13px;
+  padding:8px 14px;
+  border-radius:20px;
+  border:1px solid var(--line);
+  background:#fff;
+  min-width:200px;
+  outline:none;
+}
+#searchBox:focus{ border-color:var(--ink); }
+.sort-toggle{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11.5px;
+  color:var(--text-soft);
+  cursor:pointer;
+  text-decoration:underline;
+  text-underline-offset:3px;
+  margin-left:4px;
+  white-space:nowrap;
+}
+
+/* ---------- LIST ---------- */
+main{ padding:24px 28px 60px; max-width:920px; margin:0 auto; }
+.empty-note{
+  text-align:center;
+  color:var(--text-soft);
+  font-size:14px;
+  padding:40px 0;
+  font-style:italic;
+}
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:10px;
+  margin-bottom:14px;
+  padding:0;
+  position:relative;
+  overflow:hidden;
+  transition:box-shadow .15s ease;
+}
+.card:hover{ box-shadow:0 4px 18px rgba(31,58,46,0.08); }
+.card-top{
+  display:flex;
+  align-items:flex-start;
+  gap:16px;
+  padding:18px 20px 14px 20px;
+}
+.flag{
+  flex-shrink:0;
+  writing-mode:vertical-rl;
+  text-orientation:mixed;
+  transform:rotate(180deg);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  font-weight:600;
+  padding:10px 6px;
+  border-radius:5px;
+  align-self:stretch;
+  text-align:center;
+}
+.flag.HIGH{ background:var(--high-bg); color:var(--high); }
+.flag.MEDIUM{ background:var(--med-bg); color:var(--med); }
+.flag.LOW{ background:var(--low-bg); color:var(--low); }
+
+.card-main{ flex:1; min-width:0; }
+.card-title-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.grant-name{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  font-size:18px;
+  color:var(--ink);
+  margin:0 0 3px;
+}
+.funder{
+  font-size:13px;
+  color:var(--text-soft);
+  margin-bottom:10px;
+}
+.score-badge{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  font-weight:600;
+  padding:3px 9px;
+  border-radius:12px;
+  white-space:nowrap;
+}
+.score-badge.HIGH{ background:var(--high-bg); color:var(--high); }
+.score-badge.MEDIUM{ background:var(--med-bg); color:var(--med); }
+.score-badge.LOW{ background:var(--low-bg); color:var(--low); }
+
+.meta-row{
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  color:var(--text-soft);
+  margin-bottom:10px;
+}
+.meta-row .meta-item b{ color:var(--text); font-weight:600; }
+.deadline-tag{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11.5px;
+  font-weight:600;
+  padding:2px 8px;
+  border-radius:4px;
+  background:var(--paper-dim);
+  color:var(--ink);
+}
+.deadline-tag.urgent{ background:#F3E2DD; color:var(--low); }
+
+.why{
+  font-size:13.5px;
+  line-height:1.55;
+  color:var(--text);
+  margin:0;
+}
+.caveat{
+  font-size:12.5px;
+  color:var(--text-soft);
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px dashed var(--line);
+  line-height:1.5;
+}
+.caveat b{ color:var(--med); }
+
+/* ---------- FOOTER SECTIONS ---------- */
+.info-block{
+  max-width:920px;
+  margin:0 auto 50px;
+  padding:0 28px;
+}
+.info-block h2{
+  font-family:'Fraunces',serif;
+  font-size:20px;
+  color:var(--ink);
+  margin:0 0 12px;
+}
+.info-block p, .info-block li{
+  font-size:14px;
+  line-height:1.65;
+  color:var(--text);
+}
+.next-features{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:14px;
+  margin-top:10px;
+}
+.feature-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:16px 18px;
+}
+.feature-card h3{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12.5px;
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+  color:var(--gold);
+  margin:0 0 6px;
+}
+.feature-card p{ font-size:13px; margin:0; color:var(--text-soft); }
+
+@media (max-width:600px){
+  .flag{ writing-mode:horizontal-tb; transform:none; padding:4px 8px; align-self:flex-start; }
+  .card-top{ flex-direction:column; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Grant Research Scanner</div>
+  <h1>Valley Community Food Bank</h1>
+  <div class="org-line">
+    Mission: ending hunger regionally through emergency food distribution, a children's backpack program, nutrition education, and senior meal delivery. Mid-sized Ohio metro · ~$2.5M annual budget.
+  </div>
+  <div class="stat-row">
+    <div class="stat"><div class="num" id="statTotal">8</div><div class="lbl">Opportunities</div></div>
+    <div class="stat"><div class="num" id="statHigh">2</div><div class="lbl">High match</div></div>
+    <div class="stat"><div class="num" id="statUrgent">1</div><div class="lbl">Deadline &lt; 30 days</div></div>
+  </div>
+</header>
+
+<div class="controls">
+  <button class="filter-btn active" data-filter="ALL">All</button>
+  <button class="filter-btn" data-filter="HIGH"><span class="dot" style="background:#3E6E4F"></span>High</button>
+  <button class="filter-btn" data-filter="MEDIUM"><span class="dot" style="background:#B8863A"></span>Medium</button>
+  <button class="filter-btn" data-filter="LOW"><span class="dot" style="background:#A34B3E"></span>Low</button>
+  <span class="sort-toggle" id="sortToggle">sort: deadline soonest ↕</span>
+  <input id="searchBox" type="text" placeholder="Search funder or keyword…">
+</div>
+
+<main>
+  <div id="cardList"></div>
+  <div class="empty-note" id="emptyNote" style="display:none;">No grants match that filter — try "All" or clear the search.</div>
+</main>
+
+<div class="info-block">
+  <h2>How fit scores work</h2>
+  <p>Each score (0–100) combines four checks: <b>mission/program alignment</b> (does the funder's stated priority actually match a program this org runs, not just the word "hunger"), <b>geographic eligibility</b> (is the org's location inside the funder's actual service area), <b>award-size fit</b> (is the grant amount meaningful but realistic for a $2.5M-budget organization to absorb and report on), and <b>deadline feasibility</b> (is there enough runway to actually assemble a competitive application). A grant can sound like a great thematic match and still score Low if it's geographically restricted or structurally built for a different kind of organization — that's deliberate, not a bug. Two of the eight results below score Low for exactly that reason, which is worth noticing.</p>
+</div>
+
+<div class="info-block">
+  <h2>Next features I'd build with more time</h2>
+  <div class="next-features">
+    <div class="feature-card">
+      <h3>Deadline auto-tracking</h3>
+      <p>Sync each grant's deadline to a shared calendar and send staff a reminder at 60/30/14 days out, so nothing quietly expires between board meetings.</p>
+    </div>
+    <div class="feature-card">
+      <h3>First-pass LOI drafting</h3>
+      <p>For any grant marked High or Medium, generate a draft Letter of Inquiry pre-filled with the org's mission and the specific program that matches the funder's priorities — a starting point, not a final draft.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Outcome tracking loop</h3>
+      <p>Let staff mark grants as Applied / Awarded / Declined, and feed those outcomes back into the fit-scoring logic so it gets sharper about this org's actual win patterns over time.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const grants = [
+  {
+    name: "Community Food Projects Competitive Grants Program (CFPCGP)",
+    funder: "USDA National Institute of Food and Agriculture (NIFA)",
+    type: "Federal",
+    deadline: "2026-07-16",
+    deadlineLabel: "July 16, 2026",
+    amount: "$125,000–$400,000 (Community Food Projects track)",
+    fit: "HIGH",
+    score: 94,
+    why: "Directly funds hunger-relief nonprofits building long-term food security solutions, and specifically requires including food-insecure community members in program design — a strong match for an org already running distribution, nutrition education, and a backpack program. The award range is large enough to be transformative but is proportionate to a $2.5M operating budget.",
+    caveat: "Requires 1:1 matching funds and self-sustainability planning. Deadline is close — this needs a go/no-go decision within days, not weeks."
+  },
+  {
+    name: "Zero Hunger | Zero Waste Foundation Grant",
+    funder: "The Kroger Co. Foundation",
+    type: "Corporate Foundation",
+    deadline: "2026-09-18",
+    deadlineLabel: "Sept 18, 2026 (quarterly cycle)",
+    amount: "$25,000–$250,000",
+    fit: "HIGH",
+    score: 91,
+    why: "Kroger is headquartered in Ohio and this fund explicitly prioritizes mobile pantry programs and transportation/food-access needs for partner agencies — a near line-for-line match with this food bank's mobile pantry distribution model. Reviewed quarterly, so there's a real, recurring path in.",
+    caveat: "Highly competitive nationally; strongest odds come from a specific, well-scoped ask (e.g. a refrigerated van or mobile pantry expansion) rather than general operating support."
+  },
+  {
+    name: "Kroger Co. Foundation Community Grants",
+    funder: "The Kroger Co. Foundation",
+    type: "Corporate Foundation",
+    deadline: "2026-09-18",
+    deadlineLabel: "Sept 18, 2026 (quarterly cycle)",
+    amount: "Typically low four to low six figures",
+    fit: "MEDIUM",
+    score: 76,
+    why: "This is Kroger's broader community-giving arm, which also funds education and youth development alongside hunger relief — a plausible fit for the backpack program and nutrition classes, but the review criteria weight direct hunger relief more heavily than youth programming specifically.",
+    caveat: "Same application portal and deadline as the Zero Hunger fund above — worth deciding which fund is the better primary fit rather than applying to both with the same request."
+  },
+  {
+    name: "Spark Good Local Grants",
+    funder: "Walmart / Sam's Club Foundation",
+    type: "Corporate — Local",
+    deadline: "2026-08-01",
+    deadlineLabel: "Rolling, 2026 cycle open through 3 windows",
+    amount: "$250–$5,000",
+    fit: "MEDIUM",
+    score: 64,
+    why: "\"Hunger relief and healthy eating\" is a named funding category, and the local store/club application process is genuinely low-effort. Worth pursuing as a volume play across every Walmart/Sam's Club location in the service area, but individual awards are small relative to a $2.5M budget.",
+    caveat: "Applications are per-facility, not org-wide — a food bank with multiple counties in its service area may need to submit several separate local applications."
+  },
+  {
+    name: "JBF Do Good Grant",
+    funder: "Joe Burrow Foundation",
+    type: "Private Foundation",
+    deadline: null,
+    deadlineLabel: "Check foundation site for current cycle",
+    amount: "Up to $10,000",
+    fit: "MEDIUM",
+    score: 58,
+    why: "Explicitly funds programs serving underprivileged children facing food insecurity — a strong thematic match for the backpack program. But the foundation's stated service area is Greater Cincinnati and Baton Rouge, so this only clears geographic eligibility if the food bank's service area includes Cincinnati.",
+    caveat: "Geographic fit is conditional — verify the org's counties actually fall inside the foundation's giving footprint before investing time in an application."
+  },
+  {
+    name: "Local Market Community Giving",
+    funder: "Bank of America Charitable Foundation",
+    type: "Corporate — Local Market",
+    deadline: null,
+    deadlineLabel: "Varies by local market — no fixed portal deadline",
+    amount: "Variable ($50,000+ seen for infrastructure/senior-feeding grants)",
+    fit: "MEDIUM",
+    score: 57,
+    why: "Bank of America has recently funded food bank infrastructure and senior feeding programs at other organizations — a plausible match for both the senior meal delivery program and general capacity needs. But BofA's giving tends to run through relationships with local market presidents rather than an open portal.",
+    caveat: "This is a relationship-building lead, not a fill-out-a-form opportunity — best pursued by requesting a meeting with the local BofA community affairs contact."
+  },
+  {
+    name: "Food Security Fund",
+    funder: "Community Foundation for the Ohio Valley (CFOV)",
+    type: "Community Foundation",
+    deadline: "2026-09-01",
+    deadlineLabel: "Rounds throughout the year",
+    amount: "Up to $5,000",
+    fit: "LOW",
+    score: 32,
+    why: "Thematically this is a near-perfect match — it explicitly funds food pantries and backpack programs. It scores Low anyway because eligibility is restricted to an 8-county service area (Belmont and Jefferson counties in Ohio, plus several West Virginia panhandle counties), which likely excludes a food bank based in a different Ohio metro.",
+    caveat: "Only pursue if the org's actual service counties overlap this specific list — otherwise this is a clean example of a thematic match that fails on geography."
+  },
+  {
+    name: "Healthy Food Financing Initiative (HFFI) FARE Fund",
+    funder: "USDA Rural Development",
+    type: "Federal",
+    deadline: null,
+    deadlineLabel: "2026 cycle — check NOFO for exact date",
+    amount: "Up to $75,000 (planning/predevelopment)",
+    fit: "LOW",
+    score: 35,
+    why: "This fund is built for food retail and grocery-access expansion projects (new stores, retail supply chains) rather than food bank distribution operations. It only becomes a real fit if the organization is developing a retail-style \"choice pantry\" or grocery partnership — otherwise the structural mismatch outweighs the thematic overlap.",
+    caveat: "Worth a second look only if there's a specific retail-model project on the roadmap; not a fit for standard pantry or mobile distribution operations."
+  }
+];
+
+let activeFilter = "ALL";
+let sortAsc = true;
+let searchTerm = "";
+
+function daysUntil(dateStr){
+  if(!dateStr) return Infinity;
+  const d = new Date(dateStr);
+  const now = new Date("2026-07-03");
+  return Math.round((d-now)/(1000*60*60*24));
+}
+
+function render(){
+  const list = document.getElementById('cardList');
+  const empty = document.getElementById('emptyNote');
+  let items = grants.filter(g => activeFilter==="ALL" || g.fit===activeFilter);
+  if(searchTerm){
+    const t = searchTerm.toLowerCase();
+    items = items.filter(g => (g.name+g.funder+g.why).toLowerCase().includes(t));
+  }
+  items.sort((a,b)=>{
+    const da = daysUntil(a.deadline), db = daysUntil(b.deadline);
+    return sortAsc ? da-db : db-da;
+  });
+
+  if(items.length===0){
+    list.innerHTML = "";
+    empty.style.display = "block";
+    return;
+  }
+  empty.style.display = "none";
+
+  list.innerHTML = items.map(g=>{
+    const dleft = daysUntil(g.deadline);
+    const urgent = dleft <= 30;
+    return `
+    <div class="card">
+      <div class="card-top">
+        <div class="flag ${g.fit}">${g.fit}</div>
+        <div class="card-main">
+          <div class="card-title-row">
+            <div>
+              <div class="grant-name">${g.name}</div>
+              <div class="funder">${g.funder} · ${g.type}</div>
+            </div>
+            <div class="score-badge ${g.fit}">${g.score}/100</div>
+          </div>
+          <div class="meta-row">
+            <span class="deadline-tag ${urgent ? 'urgent':''}">◷ ${g.deadlineLabel}</span>
+            <span class="meta-item"><b>${g.amount}</b></span>
+          </div>
+          <p class="why">${g.why}</p>
+          <div class="caveat"><b>Watch for:</b> ${g.caveat}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    render();
+  });
+});
+
+document.getElementById('sortToggle').addEventListener('click', function(){
+  sortAsc = !sortAsc;
+  this.textContent = sortAsc ? "sort: deadline soonest ↕" : "sort: deadline furthest ↕";
+  render();
+});
+
+document.getElementById('searchBox').addEventListener('input', (e)=>{
+  searchTerm = e.target.value;
+  render();
+});
+
+render();
+</script>
+
+</body>
+</html>

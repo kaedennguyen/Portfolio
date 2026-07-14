@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How I Built the Grant Scanner — Plain English</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  :root{
+    --navy-deep:#0B1526; --navy-line:#223A63; --blue:#3B7CF2; --blue-light:#6FA1FF;
+    --off:#F3F6FB; --off-line:#E1E7F0; --text-dark:#141B2B; --text-dim-dark:#5B6577;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:'Inter',sans-serif; background:var(--off); color:var(--text-dark); }
+  a{ color:var(--blue); text-decoration:none; } a:hover{ text-decoration:underline; }
+  h1,h2{ font-family:'Plus Jakarta Sans',sans-serif; margin:0; }
+  header{ background:var(--navy-deep); padding:56px 32px 44px; border-bottom:1px solid var(--navy-line); }
+  .wrap{ max-width:720px; margin:0 auto; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--blue-light); margin:0 0 12px; }
+  header h1{ color:#fff; font-weight:800; font-size:28px; line-height:1.3; }
+  header p.tag{ color:#A9B8D6; font-size:14px; margin-top:14px; font-style:italic; }
+  main{ padding:52px 32px 80px; font-size:15.5px; line-height:1.8; color:var(--text-dim-dark); }
+  main h2{ font-size:19px; color:var(--text-dark); margin-top:44px; margin-bottom:14px; }
+  main h2:first-child{ margin-top:0; }
+  main p{ margin:0 0 16px; }
+  main ol, main ul{ padding-left:22px; margin:0 0 16px; }
+  main li{ margin-bottom:10px; }
+  main strong{ color:var(--text-dark); }
+  .back{ display:inline-block; margin-top:36px; font-size:13.5px; font-weight:600; }
+  footer{ background:var(--navy-deep); padding:22px; text-align:center; }
+  footer p{ font-size:12px; color:#7488AE; margin:0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow">How I Built It — Plain English</p>
+    <h1>The Grant Fit Scanner</h1>
+    <p class="tag">Written for someone who's never used Claude (or any AI tool like it). No jargon, no assumed background.</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <h2>What Claude actually is, quickly</h2>
+    <p>Claude is an AI assistant made by a company called Anthropic. Think of it like a very capable research assistant you talk to by typing — you describe what you want, and it does the work: looking things up online, writing, organizing information, and even building simple, working webpages you can click around in. You don't need to know how to code to use it. I don't have a coding background, and everything below was done just by typing instructions in plain sentences.</p>
+
+    <h2>What I asked for</h2>
+    <p>I told Claude I wanted a tool that could help a food bank (or similar nonprofit) figure out which grants were actually worth applying for — instead of a staff member spending hours digging through funder websites. I asked for it in five parts, in order:</p>
+    <ol>
+      <li><strong>First, describe the nonprofit.</strong> What's its mission, what programs does it run, where is it, and roughly how big is its budget?</li>
+      <li><strong>Then, go find real grants.</strong> Not made-up examples — actual funding opportunities that exist right now, from real organizations.</li>
+      <li><strong>Then, build it as something clickable.</strong> Not just a list of text, but an actual little webpage I could open, filter, and search through.</li>
+      <li><strong>Then, explain the choices.</strong> Why did it organize things the way it did?</li>
+      <li><strong>Finally, suggest what's next.</strong> If I had more time, what would I add to make this even better?</li>
+    </ol>
+
+    <h2>What happened, step by step</h2>
+    <p><strong>Step 1 — It asked me a question first.</strong> Rather than guessing, Claude asked whether I had a real nonprofit in mind or wanted a made-up example. I picked the made-up example, so it invented a realistic profile for a mid-sized food bank in Ohio — the kind of organization that runs a food pantry, a weekend meal program for kids, nutrition classes, and meal delivery for seniors.</p>
+    <p><strong>Step 2 — It actually searched the internet.</strong> This is the part I want to be clear about, because it's the part that could easily be faked. I specifically told Claude not to make up grant names — to go find real ones. It ran several real internet searches (you could see it doing this, one search at a time) and came back with actual grants from actual organizations: the U.S. Department of Agriculture, the Kroger grocery chain's charitable foundation, Walmart's community giving program, and a few others. It pulled real deadlines, real dollar amounts, and real eligibility rules from each funder's own website or reputable databases — not guesses.</p>
+    <p><strong>Step 3 — It built an actual working tool.</strong> Instead of just typing out a list, Claude created a small interactive webpage. It opens right in a web browser — no installation, no account, nothing to set up. On it, you can:</p>
+    <ul>
+      <li>Click buttons to filter grants by how good a match they are (High / Medium / Low)</li>
+      <li>Sort them by which deadline is coming up soonest</li>
+      <li>Type in a search box to find a specific funder</li>
+    </ul>
+    <p>Each grant shows the funder's name, the deadline, how much money is available, and — most importantly — a plain-English explanation of why it is or isn't a good fit for this food bank. A couple of the grants are deliberately marked as poor fits, even though they sound related to hunger relief on the surface, because they turned out to be geographically restricted or built for a different kind of organization. That's a feature, not a mistake — it shows the tool is actually thinking through fit, not just collecting anything with the word "hunger" in it.</p>
+    <p><strong>Step 4 — It explained its own reasoning.</strong> I asked Claude to walk me through why it built the tool the way it did — why deadlines are shown first, why there's a numeric score, why some near-matches are flagged as low priority. This mattered because I wanted to be able to talk about the project intelligently in an application, without just repeating back something I didn't understand.</p>
+    <p><strong>Step 5 — It suggested what to build next.</strong> I asked for a few realistic "if I had more time" ideas, so I'd have thoughtful answers ready if someone asked "what would you add?" in an interview. It suggested things like automatically tracking deadlines with reminders, and drafting a first version of an inquiry letter for the strongest matches.</p>
+
+    <h2>The main thing worth understanding</h2>
+    <p>The most important part of this whole process wasn't the finished webpage — it was being specific about what kind of help I wanted and in what order. I told Claude exactly what the end result should look like, insisted that the research be real rather than invented, and asked it to explain its own thinking so I could learn from it, not just receive a finished product I couldn't describe myself.</p>
+
+    <a class="back" href="../index.html">← Back to portfolio</a>
+  </div>
+</main>
+
+<footer>
+  <p>Kaeden Nguyen — Portfolio for Claude Corps Fellowship application</p>
+</footer>
+
+</body>
+</html>

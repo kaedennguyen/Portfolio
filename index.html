@@ -1,0 +1,389 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaeden Nguyen — Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --navy-deep:#0B1526; --navy:#11223E; --navy-panel:#152A4C; --navy-line:#223A63;
+    --blue:#3B7CF2; --blue-light:#6FA1FF; --blue-dark:#2A5FD1;
+    --white:#FFFFFF; --off:#F3F6FB; --off-line:#E1E7F0;
+    --text-dark:#141B2B; --text-dim-dark:#5B6577; --text-faint-dark:#8892A3;
+    --text-light:#EAF0FC; --text-dim-light:#A9B8D6; --text-faint-light:#7488AE;
+    --radius:10px;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ margin:0; font-family:'Inter',sans-serif; background:var(--off); color:var(--text-dark); -webkit-font-smoothing:antialiased; }
+  a{ color:inherit; }
+  h1,h2,h3,h4{ font-family:'Plus Jakarta Sans',sans-serif; margin:0; }
+  ::selection{ background:var(--blue); color:#fff; }
+
+  nav{
+    position:sticky; top:0; z-index:50; display:flex; align-items:center; gap:6px;
+    padding:16px 32px; background:var(--navy-deep); border-bottom:1px solid var(--navy-line);
+  }
+  .logo{
+    font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:13px; color:var(--white);
+    border:1.5px solid var(--blue); width:36px; height:36px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center; margin-right:20px;
+  }
+  nav a.nav-link{ font-size:13.5px; font-weight:500; text-decoration:none; color:var(--text-dim-light); padding:8px 14px; border-radius:6px; transition:color .15s ease; }
+  nav a.nav-link:hover{ color:var(--white); }
+  nav .spacer{ flex:1; }
+  .nav-cta{ font-size:13px; font-weight:600; text-decoration:none; background:var(--blue); color:#fff; padding:10px 18px; border-radius:8px; transition:background .15s ease; }
+  .nav-cta:hover{ background:var(--blue-dark); }
+
+  section{ padding:88px 32px; max-width:1160px; margin:0 auto; }
+  .section-dark{ background:var(--navy-deep); }
+  .section-navy{ background:var(--navy); }
+
+  .hero{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center; padding-top:72px; }
+  @media (max-width:860px){ .hero{ grid-template-columns:1fr; } }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--blue-light); margin:0 0 14px; }
+  .hero h1{ font-weight:800; font-size:clamp(36px,4.6vw,52px); line-height:1.1; color:var(--white); margin:0 0 20px; }
+  .hero-lede{ font-size:16.5px; line-height:1.75; color:var(--text-dim-light); max-width:500px; margin:0 0 30px; }
+  .cta-row{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:30px; }
+  .btn{ font-size:13.5px; font-weight:600; text-decoration:none; padding:13px 24px; border-radius:8px; display:inline-block; transition:all .15s ease; }
+  .btn-solid{ background:var(--blue); color:#fff; }
+  .btn-solid:hover{ background:var(--blue-dark); }
+  .btn-outline-dark{ border:1.5px solid var(--navy-line); color:var(--text-light); }
+  .btn-outline-dark:hover{ border-color:var(--blue-light); color:var(--blue-light); }
+  .social-row{ display:flex; gap:12px; }
+  .social-row a{
+    width:40px; height:40px; border:1px solid var(--navy-line); border-radius:8px; display:flex;
+    align-items:center; justify-content:center; text-decoration:none; color:var(--text-dim-light);
+    font-family:'IBM Plex Mono',monospace; font-size:13px; transition:all .15s ease;
+  }
+  .social-row a:hover{ border-color:var(--blue); color:var(--blue-light); }
+
+  .mockup-wrap{ position:relative; display:flex; justify-content:center; }
+  .mockup-glow{ position:absolute; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle, rgba(59,124,242,0.28) 0%, transparent 70%); top:-30px; right:-20px; z-index:0; }
+  .browser{
+    position:relative; z-index:1; width:100%; max-width:460px; background:var(--navy-panel);
+    border:1px solid var(--navy-line); border-radius:12px; overflow:hidden;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.55); transform:rotate(1deg);
+  }
+  .browser-bar{ display:flex; align-items:center; gap:6px; padding:11px 14px; background:var(--navy); border-bottom:1px solid var(--navy-line); }
+  .browser-dot{ width:9px; height:9px; border-radius:50%; background:var(--navy-line); }
+  .browser img{ width:100%; display:block; }
+
+  .sec-head{ margin-bottom:40px; }
+  .sec-head.center{ text-align:center; }
+  .sec-eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--blue); margin:0 0 10px; }
+  .sec-head.dark-ctx .sec-eyebrow{ color:var(--blue-light); }
+  .sec-title{ font-weight:700; font-size:30px; color:var(--text-dark); }
+  .sec-head.dark-ctx .sec-title{ color:var(--white); }
+  .sec-title-rule{ width:46px; height:3px; background:var(--blue); margin-top:14px; border-radius:2px; }
+  .sec-head.center .sec-title-rule{ margin-left:auto; margin-right:auto; }
+  .sec-sub{ font-size:15px; line-height:1.7; color:var(--text-dim-dark); max-width:620px; margin-top:14px; }
+  .sec-head.dark-ctx .sec-sub{ color:var(--text-dim-light); }
+  .sec-head.center .sec-sub{ margin-left:auto; margin-right:auto; }
+
+  .about-grid{ display:grid; grid-template-columns:260px 1fr; gap:52px; align-items:flex-start; }
+  @media (max-width:720px){ .about-grid{ grid-template-columns:1fr; } }
+  .avatar{
+    width:260px; height:260px; border-radius:14px; background:linear-gradient(150deg,var(--navy),var(--navy-panel));
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:64px; color:var(--blue-light);
+    box-shadow:0 20px 40px -16px rgba(20,30,50,0.25);
+  }
+  .about-body p{ font-size:15.5px; line-height:1.8; color:var(--text-dim-dark); margin:0 0 16px; }
+  .trait-row{ display:flex; gap:36px; margin-top:26px; flex-wrap:wrap; }
+  .trait{ display:flex; align-items:center; gap:12px; }
+  .trait-icon{ width:44px; height:44px; border-radius:10px; background:#E9EFFC; color:var(--blue); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; flex-shrink:0; }
+  .trait .t-label{ font-weight:600; font-size:14px; color:var(--text-dark); }
+  .trait .t-sub{ font-size:12px; color:var(--text-faint-dark); margin-top:2px; }
+
+  .skill-row{ display:flex; flex-wrap:wrap; justify-content:center; gap:36px 44px; }
+  .skill-item{ display:flex; flex-direction:column; align-items:center; gap:10px; width:110px; text-align:center; }
+  .skill-icon{ width:56px; height:56px; border-radius:14px; background:var(--navy-panel); border:1px solid var(--navy-line); display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; color:var(--blue-light); }
+  .skill-item span{ font-size:12.5px; font-weight:600; color:var(--text-dim-light); }
+
+  .project-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; }
+  @media (max-width:940px){ .project-grid{ grid-template-columns:1fr; } }
+  .pcard{ background:var(--navy); border:1px solid var(--navy-line); border-radius:var(--radius); overflow:hidden; display:flex; flex-direction:column; }
+  .pcard-img{ padding:14px 14px 0; }
+  .pcard-img img{ width:100%; display:block; border-radius:6px; border:1px solid var(--navy-line); }
+  .pcard-body{ padding:20px 22px 24px; display:flex; flex-direction:column; flex:1; }
+  .pcard-title{ font-weight:700; font-size:17px; color:var(--white); margin:0 0 8px; }
+  .pcard-desc{ font-size:13px; line-height:1.65; color:var(--text-dim-light); margin:0 0 18px; flex:1; }
+  .pcard-btns{ display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+  .pcard-btns a{ font-size:12.5px; font-weight:600; text-decoration:none; padding:9px 14px; border-radius:7px; }
+  .pcard-btns a.primary{ background:var(--blue); color:#fff; }
+  .pcard-btns a.primary:hover{ background:var(--blue-dark); }
+  .pcard-btns a.ghost{ border:1px solid var(--navy-line); color:var(--text-dim-light); }
+  .pcard-btns a.ghost:hover{ border-color:var(--blue-light); color:var(--blue-light); }
+  .pcard-links{ display:flex; flex-direction:column; gap:5px; border-top:1px solid var(--navy-line); padding-top:12px; }
+  .pcard-links a{ font-size:11.5px; text-decoration:none; color:var(--text-faint-light); }
+  .pcard-links a:hover{ color:var(--blue-light); }
+
+  .resume-grid{ display:grid; grid-template-columns:1fr 0.85fr; gap:56px; align-items:center; }
+  @media (max-width:820px){ .resume-grid{ grid-template-columns:1fr; } }
+  .resume-copy p{ font-size:15px; line-height:1.75; color:var(--text-dim-dark); margin:0 0 22px; max-width:480px; }
+  .record-mini{ background:var(--white); border:1px solid var(--off-line); border-radius:var(--radius); padding:24px 26px; box-shadow:0 20px 40px -24px rgba(20,30,50,0.18); }
+  .record-mini h4{ font-size:11.5px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--blue); margin:0 0 14px; }
+  .record-mini .entry{ margin-bottom:16px; }
+  .record-mini .entry:last-child{ margin-bottom:0; }
+  .record-mini .entry-title{ font-weight:700; font-size:14.5px; color:var(--text-dark); }
+  .record-mini .entry-meta{ font-size:12px; color:var(--text-faint-dark); margin-top:2px; }
+  .field-row{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--off-line); font-size:13px; }
+  .field-row:last-child{ border-bottom:none; }
+  .field-row .k{ color:var(--text-faint-dark); font-size:11.5px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; }
+  .field-row .v{ color:var(--text-dark); }
+  .field-row .v.blank{ color:var(--text-faint-dark); font-style:italic; }
+  .field-row a.v{ color:var(--blue); text-decoration:none; font-weight:600; }
+  .field-row a.v:hover{ text-decoration:underline; }
+  .exp-block{ background:var(--white); border:1px solid var(--off-line); border-radius:var(--radius); padding:26px 28px; margin-top:26px; box-shadow:0 20px 40px -24px rgba(20,30,50,0.18); }
+  .exp-block h4{ font-size:11.5px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--blue); margin:0 0 14px; }
+  .exp-block ul{ margin:8px 0 0; padding-left:20px; font-size:14px; line-height:1.75; color:var(--text-dim-dark); }
+  .exp-block li{ margin-bottom:6px; }
+
+  .contact-grid{ display:grid; grid-template-columns:0.95fr 1.05fr; gap:44px; }
+  @media (max-width:820px){ .contact-grid{ grid-template-columns:1fr; } }
+  .contact-copy p{ font-size:15px; line-height:1.75; color:var(--text-dim-light); margin:0 0 26px; max-width:420px; }
+  .contact-detail{ display:flex; align-items:center; gap:12px; margin-bottom:16px; font-size:14px; color:var(--text-dim-light); }
+  .contact-detail .ic{ width:34px; height:34px; border-radius:8px; background:var(--navy-panel); border:1px solid var(--navy-line); display:flex; align-items:center; justify-content:center; font-size:14px; color:var(--blue-light); flex-shrink:0; }
+  .contact-detail a{ color:var(--text-dim-light); text-decoration:none; }
+  .contact-detail a:hover{ color:var(--blue-light); }
+  .contact-form{ background:var(--navy-panel); border:1px solid var(--navy-line); border-radius:var(--radius); padding:28px; display:flex; flex-direction:column; gap:14px; }
+  .contact-form input, .contact-form textarea{
+    background:var(--navy-deep); border:1px solid var(--navy-line); border-radius:8px; padding:13px 15px;
+    color:var(--text-light); font-family:'Inter',sans-serif; font-size:14px; resize:vertical;
+  }
+  .contact-form input::placeholder, .contact-form textarea::placeholder{ color:var(--text-faint-light); }
+  .contact-form textarea{ min-height:110px; }
+  .contact-form button{
+    font-size:13.5px; font-weight:600; background:var(--blue); color:#fff; border:none;
+    border-radius:8px; padding:13px 22px; cursor:pointer; align-self:flex-start; transition:background .15s ease;
+  }
+  .contact-form button:hover{ background:var(--blue-dark); }
+  .form-note{ font-size:11.5px; color:var(--text-faint-light); margin-top:-6px; }
+
+  footer{ background:var(--navy-deep); border-top:1px solid var(--navy-line); padding:24px 24px; text-align:center; }
+  .footer-label{ font-size:12px; color:var(--text-faint-light); }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">KN</span>
+  <a class="nav-link" href="#home">Home</a>
+  <a class="nav-link" href="#about">About</a>
+  <a class="nav-link" href="#projects">Projects</a>
+  <a class="nav-link" href="#resume">Resume</a>
+  <a class="nav-link" href="#contact">Contact</a>
+  <span class="spacer"></span>
+  <a class="nav-cta" href="#resume">View Resume</a>
+</nav>
+
+<section class="section-dark hero" id="home">
+  <div>
+    <p class="eyebrow">Claude Corps Fellowship Applicant</p>
+    <h1>Building tools.<br>Helping neighbors.</h1>
+    <p class="hero-lede">
+      I volunteer at my local food bank, and this past year I picked up a real skill: building
+      things with Claude. Here are three small tools I made for the kind of day-to-day work food
+      banks deal with, plus a bit about me.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-solid" href="#projects">View my work</a>
+      <a class="btn btn-outline-dark" href="#contact">Contact me</a>
+    </div>
+    <div class="social-row">
+      <a href="mailto:phantomfire676@gmail.com" title="Email">@</a>
+      <a href="tel:+14693474513" title="Phone">☎</a>
+      <a href="#" title="LinkedIn — add your URL">in</a>
+      <a href="#" title="GitHub — add your URL">gh</a>
+    </div>
+  </div>
+  <div class="mockup-wrap">
+    <div class="mockup-glow"></div>
+    <div class="browser">
+      <div class="browser-bar">
+        <span class="browser-dot"></span><span class="browser-dot"></span><span class="browser-dot"></span>
+      </div>
+      <img src="screenshots/thank-you-ledger.png" alt="Thank-You Ledger tool preview">
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="sec-head">
+    <p class="sec-eyebrow">About</p>
+    <h2 class="sec-title">Why food security</h2>
+    <div class="sec-title-rule"></div>
+  </div>
+  <div class="about-grid">
+    <div class="avatar">KN</div>
+    <div class="about-body">
+      <p>I grew up never having to think about where my next meal was coming from. At some point
+      I noticed that plenty of people my age don't get that, and it never sat right with me.</p>
+      <p>So I started volunteering at my local food bank. What surprised me was how much of the
+      work is just logistics: matching volunteers to shifts, chasing grant deadlines, writing
+      thank-you notes so they don't read like a form letter. Claude happens to be good at all
+      three of those, which is the actual reason I built the projects below.</p>
+      <div class="trait-row">
+        <div class="trait"><div class="trait-icon">♥</div><div><div class="t-label">Empathy-driven</div><div class="t-sub">Volunteers locally, builds for real gaps</div></div></div>
+        <div class="trait"><div class="trait-icon">↑</div><div><div class="t-label">Fast learner</div><div class="t-sub">A year of daily, self-directed Claude use</div></div></div>
+        <div class="trait"><div class="trait-icon">◆</div><div><div class="t-label">Self-directed</div><div class="t-sub">Ships working tools without a team</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-navy" id="skills">
+  <div class="sec-head center dark-ctx">
+    <p class="sec-eyebrow">Skills</p>
+    <h2 class="sec-title">What I actually work with</h2>
+    <div class="sec-title-rule"></div>
+  </div>
+  <div class="skill-row">
+    <div class="skill-item"><div class="skill-icon">C</div><span>Claude / Prompting</span></div>
+    <div class="skill-item"><div class="skill-icon">◈</div><span>Chatbot Dev</span></div>
+    <div class="skill-item"><div class="skill-icon">&lt;/&gt;</div><span>HTML/CSS/JS</span></div>
+    <div class="skill-item"><div class="skill-icon">i</div><span>Research &amp; Docs</span></div>
+    <div class="skill-item"><div class="skill-icon">⚙</div><span>Process Consulting</span></div>
+    <div class="skill-item"><div class="skill-icon">X</div><span>Social Growth</span></div>
+    <div class="skill-item"><div class="skill-icon">●</div><span>Self-Directed Work</span></div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="sec-head center">
+    <p class="sec-eyebrow">Featured Projects</p>
+    <h2 class="sec-title">Three tools, one fictional food bank</h2>
+    <div class="sec-title-rule"></div>
+    <p class="sec-sub">
+      Built with Claude for a hypothetical organization, "Harvest Table Food Bank." The data is
+      made up, the tools are live.
+    </p>
+  </div>
+
+  <div class="project-grid">
+    <div class="pcard">
+      <div class="pcard-img"><img src="screenshots/grant-scanner.png" alt="Grant Fit Scanner screenshot"></div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Grant Fit Scanner</h3>
+        <p class="pcard-desc">Scores real-shaped grant opportunities against an org's mission, service area, budget, and deadlines, so staff aren't reading fifty listings to find the eight worth their time.</p>
+        <div class="pcard-btns">
+          <a class="primary" href="projects/grant-scanner.html" target="_blank" rel="noopener">View Demo</a>
+          <a class="ghost" href="sop/grant-scanner-sop.html" target="_blank" rel="noopener">SOP</a>
+        </div>
+        <div class="pcard-links">
+          <a href="writeups/grant-scanner-plain-english.html" target="_blank" rel="noopener">How I built it — plain English</a>
+          <a href="writeups/grant-scanner-technical.html" target="_blank" rel="noopener">How I built it — technical</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-img"><img src="screenshots/volunteer-scheduler.png" alt="Volunteer Shift Scheduler screenshot"></div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Volunteer Shift Scheduler</h3>
+        <p class="pcard-desc">Matches volunteers to open shifts based on availability and skills like being a licensed driver, then shows which shifts still need people.</p>
+        <div class="pcard-btns">
+          <a class="primary" href="projects/volunteer-scheduler.html" target="_blank" rel="noopener">View Demo</a>
+          <a class="ghost" href="sop/volunteer-scheduler-sop.html" target="_blank" rel="noopener">SOP</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-img"><img src="screenshots/thank-you-ledger.png" alt="Thank-You Ledger screenshot"></div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Thank-You Ledger</h3>
+        <p class="pcard-desc">Writes a specific thank-you note per donor, based on what they gave and which program it funded, instead of one template for everyone.</p>
+        <div class="pcard-btns">
+          <a class="primary" href="projects/thank-you-ledger.html" target="_blank" rel="noopener">View Demo</a>
+          <a class="ghost" href="sop/thank-you-ledger-sop.html" target="_blank" rel="noopener">SOP</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="resume">
+  <div class="resume-grid">
+    <div class="resume-copy">
+      <p class="sec-eyebrow">Resume</p>
+      <h2 class="sec-title" style="margin-bottom:14px;">Background</h2>
+      <p>High school diploma, an Associate of Science from Houston Community College, and a year
+      as an independent AI contractor for OpenHome.com — chatbot development, process consulting,
+      research, and social media growth, using Claude for most of the actual work.</p>
+      <a class="btn btn-solid" href="#contact">Get in touch about it</a>
+
+      <div class="exp-block">
+        <h4>Experience — AI Contractor, OpenHome.com</h4>
+        <div style="font-size:14.5px; font-weight:700; margin-bottom:2px;">Independent Contractor, ~1 year</div>
+        <div style="font-size:12px; color:var(--text-faint-dark); margin-bottom:8px;">Consultation · Chatbot development · Research &amp; documentation · Social media growth</div>
+        <ul>
+          <li>Led development of customer-facing chatbots for the company website, using Claude as the primary build tool end to end.</li>
+          <li>Consulted on website improvements and workflow efficiency, producing research and written recommendations submitted directly to leadership.</li>
+          <li>Ran social media growth for OpenHome's accounts, including acting as lead for the company's official X account.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="record-mini">
+      <h4>Education</h4>
+      <div class="entry">
+        <div class="entry-title">Associate of Science</div>
+        <div class="entry-meta">Houston Community College (HCC)</div>
+      </div>
+      <div class="entry">
+        <div class="entry-title">High School Diploma</div>
+      </div>
+
+      <h4 style="margin-top:22px;">Contact</h4>
+      <div class="field-row"><span class="k">Email</span><a class="v" href="mailto:phantomfire676@gmail.com">phantomfire676@gmail.com</a></div>
+      <div class="field-row"><span class="k">Phone</span><a class="v" href="tel:+14693474513">469-347-4513</a></div>
+      <div class="field-row"><span class="k">Based in</span><span class="v">Houston, Texas</span></div>
+      <div class="field-row"><span class="k">LinkedIn</span><span class="v blank">add your LinkedIn URL here</span></div>
+      <div class="field-row"><span class="k">GitHub</span><span class="v blank">add your GitHub URL here</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-dark" id="contact">
+  <div class="contact-grid">
+    <div class="contact-copy">
+      <p class="sec-eyebrow">Contact</p>
+      <h2 class="sec-title" style="color:var(--white); margin-bottom:14px;">Get in touch</h2>
+      <p>Open to hearing from anyone involved in the fellowship, or anyone who wants to talk
+      about food security and what Claude can actually do for a small nonprofit.</p>
+      <div class="contact-detail"><span class="ic">@</span><a href="mailto:phantomfire676@gmail.com">phantomfire676@gmail.com</a></div>
+      <div class="contact-detail"><span class="ic">☎</span><a href="tel:+14693474513">469-347-4513</a></div>
+      <div class="contact-detail"><span class="ic">◎</span><span>Houston, Texas</span></div>
+    </div>
+    <form class="contact-form" id="contactForm">
+      <input type="text" id="cf-name" placeholder="Name" required>
+      <input type="email" id="cf-email" placeholder="Email" required>
+      <textarea id="cf-message" placeholder="Message" required></textarea>
+      <button type="submit">Send message</button>
+      <p class="form-note">Opens your email client — this form doesn't run a server.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <p class="footer-label">Kaeden Nguyen — Portfolio for Claude Corps Fellowship application · Sample project data, not a real organization</p>
+</footer>
+
+<script>
+  document.getElementById('contactForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = document.getElementById('cf-name').value;
+    const email = document.getElementById('cf-email').value;
+    const message = document.getElementById('cf-message').value;
+    const subject = encodeURIComponent('Portfolio contact from ' + name);
+    const body = encodeURIComponent(message + '\n\n— ' + name + ' (' + email + ')');
+    window.location.href = 'mailto:phantomfire676@gmail.com?subject=' + subject + '&body=' + body;
+  });
+</script>
+
+</body>
+</html>

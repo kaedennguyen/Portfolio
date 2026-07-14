@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP — Volunteer Shift Scheduler</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  :root{
+    --navy-deep:#0B1526; --navy:#11223E; --navy-panel:#152A4C; --navy-line:#223A63;
+    --blue:#3B7CF2; --blue-light:#6FA1FF;
+    --off:#F3F6FB; --off-line:#E1E7F0;
+    --text-dark:#141B2B; --text-dim-dark:#5B6577; --text-faint-dark:#8892A3;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:'Inter',sans-serif; background:var(--off); color:var(--text-dark); }
+  a{ color:var(--blue); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+  h1,h2{ font-family:'Plus Jakarta Sans',sans-serif; margin:0; }
+  header{ background:var(--navy-deep); padding:56px 32px 44px; border-bottom:1px solid var(--navy-line); }
+  .wrap{ max-width:760px; margin:0 auto; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--blue-light); margin:0 0 12px; }
+  header h1{ color:#fff; font-weight:800; font-size:32px; }
+  header p{ color:#A9B8D6; font-size:15px; line-height:1.7; margin-top:14px; max-width:600px; }
+  main{ padding:52px 32px 80px; }
+  .step{ display:flex; gap:20px; margin-bottom:34px; }
+  .step-num{
+    flex-shrink:0; width:34px; height:34px; border-radius:8px; background:#E9EFFC; color:var(--blue);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .step h2{ font-size:17px; font-weight:700; margin-bottom:6px; }
+  .step p{ font-size:14.5px; line-height:1.7; color:var(--text-dim-dark); margin:0 0 8px; }
+  .step ul{ margin:8px 0 0; padding-left:20px; font-size:14.5px; line-height:1.75; color:var(--text-dim-dark); }
+  .step li{ margin-bottom:5px; }
+  .note-box{
+    background:#fff; border:1px solid var(--off-line); border-left:3px solid var(--blue);
+    border-radius:8px; padding:16px 20px; font-size:13.5px; line-height:1.65; color:var(--text-dim-dark);
+    margin-top:32px;
+  }
+  .note-box strong{ color:var(--text-dark); }
+  .back{ display:inline-block; margin-top:36px; font-size:13.5px; font-weight:600; }
+  footer{ background:var(--navy-deep); padding:22px; text-align:center; }
+  footer p{ font-size:12px; color:#7488AE; margin:0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow">Standard Operating Procedure</p>
+    <h1>Volunteer Shift Scheduler</h1>
+    <p>How a shift coordinator at Harvest Table Food Bank would use this tool to fill the week's shifts and know exactly where the gaps are.</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <h2>Add every volunteer once, then keep it updated</h2>
+        <p>For each volunteer, enter their name, check the box if they hold a driver's license (this unlocks delivery-route shifts for them), and add every day/time block they're actually free. Use <strong>+ Add</strong> to attach as many availability blocks as apply — most volunteers have 2–3.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <h2>List every open shift for the week</h2>
+        <p>For each role that needs covering, set the day, the time block, how many spots need filling, and whether the role requires a driver (check this for delivery routes only). The tool shows an "eligible" count next to each shift as soon as it's entered, so you immediately see which shifts are already thin on qualified people.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <h2>Watch the eligible count before you panic</h2>
+        <p>A shift showing 1 eligible volunteer isn't necessarily unfillable — it means only one person's availability and skills currently match. Treat anything at 1 or 0 eligible as a recruiting flag: post in the volunteer group chat or make a call before the week gets closer.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div>
+        <h2>Run the match</h2>
+        <p>Once volunteers and shifts are both entered, the tool matches people to open spots automatically, respecting availability and the driver requirement. Anything that can't be filled is flagged clearly rather than silently left blank.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div>
+        <h2>Work the flagged gaps first</h2>
+        <p>After matching, scan for flagged/unfilled shifts before anything else. For each one, decide:</p>
+        <ul>
+          <li><strong>Recruit</strong> — reach out to a specific volunteer whose availability is close but not exact</li>
+          <li><strong>Move the shift</strong> — shift the time block if that's realistic for the program</li>
+          <li><strong>Cover it yourself or reassign</strong> — as a last resort for the week in question</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">6</div>
+      <div>
+        <h2>Remove people and shifts that no longer apply</h2>
+        <p>Use the <strong>×</strong> next to a volunteer or shift to remove them once a week is over or a volunteer steps away, so the eligible counts stay accurate for the next scheduling round.</p>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>Good to know:</strong> this demo starts with a small sample roster (Maria Alvarez, James Chen, Aaliyah Brooks and a handful of open shifts) for a fictional org. In real use, the volunteer list would persist week to week instead of resetting.
+    </div>
+
+    <a class="back" href="../index.html">← Back to portfolio</a>
+  </div>
+</main>
+
+<footer>
+  <p>Harvest Table Food Bank — sample data, not a real organization</p>
+</footer>
+
+</body>
+</html>

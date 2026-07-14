@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harvest Table — Volunteer Shift Scheduler</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F5F6EF;
+    --card: #FFFFFF;
+    --border: #DDD9C6;
+    --ink: #24301E;
+    --ink-soft: #5B6152;
+    --green: #2F5233;
+    --green-dark: #203A24;
+    --gold: #B9932A;
+    --gold-bg: #F6ECCF;
+    --brick: #A6402C;
+    --brick-bg: #F5E2DC;
+    --radius: 10px;
+    --shadow: 0 1px 2px rgba(36,48,30,0.06), 0 4px 14px rgba(36,48,30,0.05);
+  }
+  *{ box-sizing: border-box; }
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .app{ max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  header.top{ margin-bottom: 28px; }
+  .eyebrow{
+    font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gold); font-weight: 700; margin-bottom: 8px;
+  }
+  h1{
+    font-family: 'Fraunces', serif; font-weight: 600; font-size: 34px;
+    margin: 0 0 6px; color: var(--green-dark); line-height: 1.15;
+  }
+  .subtitle{ color: var(--ink-soft); font-size: 15px; max-width: 640px; line-height: 1.5; }
+
+  .panels{ display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px; }
+  @media (max-width: 820px){ .panels{ grid-template-columns: 1fr; } }
+
+  .panel{
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 18px 18px 16px; box-shadow: var(--shadow);
+  }
+  .panel h2{
+    font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600;
+    margin: 0 0 4px; color: var(--green-dark);
+  }
+  .panel .hint{ font-size: 12.5px; color: var(--ink-soft); margin-bottom: 14px; }
+
+  .vcard, .srow{
+    border: 1px solid var(--border); border-radius: 8px; padding: 12px;
+    margin-bottom: 10px; background: #FDFDFB;
+  }
+  .vcard-top{ display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .name-input{
+    flex: 1; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14.5px;
+    border: 1px solid transparent; background: transparent; padding: 4px 6px; border-radius: 6px;
+    color: var(--ink);
+  }
+  .name-input:hover, .name-input:focus{ border-color: var(--border); background: #fff; outline:none; }
+
+  .skill-toggle{ display:flex; align-items:center; gap:6px; font-size:12.5px; color: var(--ink-soft); margin-bottom:8px; }
+  .skill-toggle input{ accent-color: var(--green); }
+
+  .chip-row{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; min-height: 26px; }
+  .chip{
+    display:inline-flex; align-items:center; gap:6px; background: var(--gold-bg); color:#6b551a;
+    font-size:12px; font-weight:600; padding: 4px 8px; border-radius: 999px;
+  }
+  .chip button{
+    background:none; border:none; cursor:pointer; color:#6b551a; font-size:13px; line-height:1;
+    padding:0; opacity:0.6;
+  }
+  .chip button:hover{ opacity:1; }
+  .chip.empty{ background:none; color: var(--ink-soft); font-weight:400; font-style: italic; }
+
+  .add-row{ display:flex; gap:6px; align-items:center; flex-wrap: wrap; }
+  select, .num-input{
+    font-family:'Inter',sans-serif; font-size:12.5px; padding:5px 6px; border-radius:6px;
+    border:1px solid var(--border); background:#fff; color: var(--ink);
+  }
+  .small-btn{
+    font-size:12.5px; font-weight:600; padding:5px 10px; border-radius:6px;
+    border:1px solid var(--green); background: var(--green); color:#fff; cursor:pointer;
+  }
+  .small-btn:hover{ background: var(--green-dark); }
+  .del-btn{
+    margin-left:auto; background:none; border:none; color:#a0a0a0; cursor:pointer; font-size:16px;
+    padding: 2px 6px;
+  }
+  .del-btn:hover{ color: var(--brick); }
+
+  .srow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+  .role-input{
+    font-weight:600; font-size:14px; border:1px solid transparent; background:transparent;
+    padding:4px 6px; border-radius:6px; min-width: 150px; flex: 1;
+  }
+  .role-input:hover, .role-input:focus{ border-color: var(--border); background:#fff; outline:none; }
+  .spots-wrap{ display:flex; align-items:center; gap:4px; font-size:12px; color: var(--ink-soft); }
+  .num-input{ width: 44px; text-align:center; }
+  .req-toggle{ display:flex; align-items:center; gap:4px; font-size:11.5px; color: var(--ink-soft); }
+  .elig-badge{
+    font-size:11px; font-weight:700; padding:2px 7px; border-radius:999px;
+    background:#EAF0E6; color: var(--green-dark); white-space:nowrap;
+  }
+  .elig-badge.low{ background: var(--brick-bg); color: var(--brick); }
+
+  .panel-add{
+    width:100%; margin-top:4px; padding:9px; border-radius:8px; border:1.5px dashed var(--border);
+    background:transparent; color: var(--ink-soft); font-weight:600; font-size:13px; cursor:pointer;
+  }
+  .panel-add:hover{ border-color: var(--green); color: var(--green); }
+
+  .action-row{ display:flex; gap:12px; align-items:center; margin: 28px 0 8px; flex-wrap: wrap; }
+  .primary-btn{
+    font-family:'Fraunces', serif; font-size:16px; font-weight:600; padding:12px 26px;
+    border-radius: 999px; border: none; background: var(--green); color:#fff; cursor:pointer;
+    box-shadow: var(--shadow);
+  }
+  .primary-btn:hover{ background: var(--green-dark); }
+  .ghost-btn{
+    font-size:13px; font-weight:600; padding:11px 18px; border-radius:999px;
+    border:1px solid var(--border); background:transparent; color: var(--ink-soft); cursor:pointer;
+  }
+  .ghost-btn:hover{ border-color: var(--ink-soft); color: var(--ink); }
+
+  .results{ margin-top: 20px; }
+  .results.hidden{ display:none; }
+
+  .stats-bar{
+    display:flex; gap:22px; flex-wrap:wrap; background: var(--card); border:1px solid var(--border);
+    border-radius: var(--radius); padding:16px 20px; margin-bottom: 20px; box-shadow: var(--shadow);
+  }
+  .stat{ display:flex; flex-direction:column; }
+  .stat .num{ font-family:'Fraunces', serif; font-size:26px; font-weight:700; color: var(--green-dark); }
+  .stat .num.short{ color: var(--brick); }
+  .stat .lbl{ font-size:11.5px; color: var(--ink-soft); text-transform:uppercase; letter-spacing:0.06em; }
+
+  .unfilled-section{
+    background: var(--brick-bg); border: 1px solid #e2b6a9; border-radius: var(--radius);
+    padding: 16px 18px; margin-bottom: 22px;
+  }
+  .unfilled-section h3{
+    margin:0 0 10px; font-family:'Fraunces', serif; font-size:16px; color:#7a2c1b; display:flex; gap:8px; align-items:center;
+  }
+  .unfilled-item{
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+    background:#fff; border-radius:7px; padding:9px 12px; margin-bottom:7px; font-size:13.5px;
+  }
+  .unfilled-item:last-child{ margin-bottom:0; }
+  .unfilled-item .role{ font-weight:600; }
+  .unfilled-item .meta{ color: var(--ink-soft); font-size:12px; }
+  .unfilled-item .short-badge{
+    background: var(--brick); color:#fff; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px;
+    white-space:nowrap;
+  }
+  .all-filled-note{
+    background:#E9F1E6; border:1px solid #bfd9b6; color: var(--green-dark); border-radius: var(--radius);
+    padding:14px 18px; margin-bottom:22px; font-size:14px; font-weight:600;
+  }
+
+  .day-group{ margin-bottom: 22px; }
+  .day-group h3{
+    font-family:'Fraunces', serif; font-size:16px; color: var(--green-dark); margin: 0 0 10px;
+    padding-bottom:6px; border-bottom: 1px solid var(--border);
+  }
+  .shift-card{
+    background: var(--card); border:1px solid var(--border); border-left: 4px solid var(--green);
+    border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; box-shadow: var(--shadow);
+  }
+  .shift-card.short{ border-left-color: var(--brick); }
+  .shift-card-top{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .shift-role{ font-weight:700; font-size:14.5px; }
+  .shift-time{ font-size:12.5px; color: var(--ink-soft); }
+  .fill-badge{ font-size:11.5px; font-weight:700; padding:2px 9px; border-radius:999px; }
+  .fill-badge.full{ background:#E9F1E6; color: var(--green-dark); }
+  .fill-badge.short{ background: var(--brick-bg); color: var(--brick); }
+  .assigned-list{ margin-top:8px; display:flex; flex-wrap:wrap; gap:6px; }
+  .assigned-chip{
+    background: var(--gold-bg); color:#6b551a; font-size:12px; font-weight:600;
+    padding:4px 9px; border-radius:999px;
+  }
+  .assigned-empty{ font-size:12.5px; color: var(--ink-soft); font-style:italic; margin-top:6px; }
+
+  footer.note{
+    margin-top: 36px; font-size:12px; color: var(--ink-soft); border-top:1px solid var(--border);
+    padding-top:14px; line-height:1.6;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="eyebrow">Harvest Table Food Bank</div>
+    <h1>Volunteer Shift Scheduler</h1>
+    <div class="subtitle">Add volunteers with their availability, list the open shifts you need covered, then match them in one click. Anything that can't be filled gets flagged clearly so you know where to recruit.</div>
+  </header>
+
+  <section class="panels">
+    <div class="panel">
+      <h2>Volunteers</h2>
+      <div class="hint">Give each person a name, mark any special skill they have, and add the day/time blocks they're free.</div>
+      <div id="volunteerList"></div>
+      <button class="panel-add" onclick="addVolunteer()">+ Add volunteer</button>
+    </div>
+
+    <div class="panel">
+      <h2>Open Shifts</h2>
+      <div class="hint">List each role you need to staff, the day/time block, how many spots, and whether it requires the driver skill.</div>
+      <div id="shiftList"></div>
+      <button class="panel-add" onclick="addShift()">+ Add shift</button>
+    </div>
+  </section>
+
+  <div class="action-row">
+    <button class="primary-btn" onclick="runMatching()">Match Volunteers to Shifts</button>
+    <button class="ghost-btn" onclick="resetSample()">Reset sample data</button>
+  </div>
+
+  <section id="resultsSection" class="results hidden"></section>
+
+  <footer class="note">
+    Availability and shifts are grouped into day/time blocks (Morning 9am–12pm, Afternoon 1pm–5pm, Evening 5pm–8pm) rather than exact times, so matching is fast and unambiguous. Each volunteer is placed in at most one shift per run.
+  </footer>
+</div>
+
+<script>
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const DAY_LABELS = {Mon:'Monday',Tue:'Tuesday',Wed:'Wednesday',Thu:'Thursday',Fri:'Friday',Sat:'Saturday',Sun:'Sunday'};
+const SLOTS = ['AM','PM','EVE'];
+const SLOT_LABELS = {AM:'Morning · 9am–12pm', PM:'Afternoon · 1pm–5pm', EVE:'Evening · 5pm–8pm'};
+const SLOT_SHORT = {AM:'AM', PM:'PM', EVE:'EVE'};
+
+let volunteers = [];
+let shifts = [];
+let vCounter = 0, sCounter = 0;
+
+function sampleData(){
+  volunteers = [
+    {id:++vCounter, name:'Maria Alvarez', skills:[], availability:[{day:'Mon',slot:'AM'},{day:'Wed',slot:'AM'},{day:'Sat',slot:'AM'}]},
+    {id:++vCounter, name:'James Chen', skills:[], availability:[{day:'Tue',slot:'PM'},{day:'Thu',slot:'PM'}]},
+    {id:++vCounter, name:'Aaliyah Brooks', skills:[], availability:[{day:'Sat',slot:'AM'},{day:'Sun',slot:'AM'}]},
+    {id:++vCounter, name:'David Kim', skills:[], availability:[{day:'Mon',slot:'EVE'},{day:'Wed',slot:'EVE'},{day:'Fri',slot:'EVE'}]},
+    {id:++vCounter, name:'Priya Patel', skills:[], availability:[{day:'Wed',slot:'AM'},{day:'Sat',slot:'AM'}]},
+    {id:++vCounter, name:'Robert Johnson', skills:['Driver'], availability:[{day:'Tue',slot:'AM'},{day:'Thu',slot:'AM'},{day:'Sat',slot:'PM'}]},
+    {id:++vCounter, name:'Sofia Torres', skills:[], availability:[{day:'Mon',slot:'AM'},{day:'Fri',slot:'AM'}]},
+    {id:++vCounter, name:'Marcus Lee', skills:['Driver'], availability:[{day:'Sat',slot:'PM'},{day:'Sun',slot:'AM'}]},
+  ];
+  shifts = [
+    {id:++sCounter, role:'Food Sorting', day:'Sat', slot:'AM', spots:2, skillRequired:''},
+    {id:++sCounter, role:'Client Intake Desk', day:'Mon', slot:'AM', spots:1, skillRequired:''},
+    {id:++sCounter, role:'Evening Distribution', day:'Wed', slot:'EVE', spots:1, skillRequired:''},
+    {id:++sCounter, role:'Delivery Driver Route', day:'Sat', slot:'PM', spots:1, skillRequired:'Driver'},
+    {id:++sCounter, role:'Pantry Stocking', day:'Sun', slot:'AM', spots:1, skillRequired:''},
+    {id:++sCounter, role:'Client Intake Desk', day:'Tue', slot:'PM', spots:1, skillRequired:''},
+  ];
+}
+
+function daySelectOptions(selected){
+  return DAYS.map(d=>`<option value="${d}" ${d===selected?'selected':''}>${DAY_LABELS[d]}</option>`).join('');
+}
+function slotSelectOptions(selected){
+  return SLOTS.map(s=>`<option value="${s}" ${s===selected?'selected':''}>${SLOT_LABELS[s]}</option>`).join('');
+}
+
+function eligibleVolunteersFor(shift, volPool){
+  return volPool.filter(v =>
+    v.availability.some(a=>a.day===shift.day && a.slot===shift.slot) &&
+    (!shift.skillRequired || v.skills.includes(shift.skillRequired))
+  );
+}
+
+function renderVolunteers(){
+  const list = document.getElementById('volunteerList');
+  list.innerHTML = volunteers.map(v=>{
+    const chips = v.availability.length
+      ? v.availability.map(a=>`<span class="chip">${a.day} ${SLOT_SHORT[a.slot]}<button onclick="removeAvailability(${v.id},'${a.day}','${a.slot}')">×</button></span>`).join('')
+      : `<span class="chip empty">No availability added yet</span>`;
+    return `
+    <div class="vcard">
+      <div class="vcard-top">
+        <input class="name-input" value="${escapeHtml(v.name)}" oninput="updateVolunteerName(${v.id}, this.value)">
+        <button class="del-btn" title="Remove volunteer" onclick="deleteVolunteer(${v.id})">✕</button>
+      </div>
+      <label class="skill-toggle">
+        <input type="checkbox" ${v.skills.includes('Driver')?'checked':''} onchange="toggleDriverSkill(${v.id}, this.checked)">
+        Has a driver's license (can staff delivery routes)
+      </label>
+      <div class="chip-row">${chips}</div>
+      <div class="add-row">
+        <select id="daySel-${v.id}">${daySelectOptions()}</select>
+        <select id="slotSel-${v.id}">${slotSelectOptions()}</select>
+        <button class="small-btn" onclick="addAvailability(${v.id})">+ Add</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderShifts(){
+  const list = document.getElementById('shiftList');
+  list.innerHTML = shifts.map(s=>{
+    const eligCount = eligibleVolunteersFor(s, volunteers).length;
+    const lowClass = eligCount < s.spots ? 'low' : '';
+    return `
+    <div class="srow">
+      <input class="role-input" value="${escapeHtml(s.role)}" oninput="updateShiftRole(${s.id}, this.value)">
+      <select onchange="updateShiftDay(${s.id}, this.value)">${daySelectOptions(s.day)}</select>
+      <select onchange="updateShiftSlot(${s.id}, this.value)">${slotSelectOptions(s.slot)}</select>
+      <div class="spots-wrap">
+        spots <input class="num-input" type="number" min="1" value="${s.spots}" onchange="updateShiftSpots(${s.id}, this.value)">
+      </div>
+      <label class="req-toggle">
+        <input type="checkbox" ${s.skillRequired==='Driver'?'checked':''} onchange="toggleShiftSkill(${s.id}, this.checked)">
+        requires driver
+      </label>
+      <span class="elig-badge ${lowClass}">${eligCount} eligible</span>
+      <button class="del-btn" title="Remove shift" onclick="deleteShift(${s.id})">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function escapeHtml(str){
+  const d = document.createElement('div'); d.textContent = str; return d.innerHTML;
+}
+
+// --- Volunteer actions ---
+function addVolunteer(){
+  volunteers.push({id:++vCounter, name:'New Volunteer', skills:[], availability:[]});
+  renderVolunteers(); renderShifts();
+}
+function deleteVolunteer(id){
+  volunteers = volunteers.filter(v=>v.id!==id);
+  renderVolunteers(); renderShifts();
+}
+function updateVolunteerName(id, val){
+  const v = volunteers.find(v=>v.id===id); if(v) v.name = val;
+}
+function toggleDriverSkill(id, checked){
+  const v = volunteers.find(v=>v.id===id); if(!v) return;
+  v.skills = checked ? ['Driver'] : [];
+  renderShifts();
+}
+function addAvailability(id){
+  const v = volunteers.find(v=>v.id===id); if(!v) return;
+  const day = document.getElementById(`daySel-${id}`).value;
+  const slot = document.getElementById(`slotSel-${id}`).value;
+  if(!v.availability.some(a=>a.day===day && a.slot===slot)){
+    v.availability.push({day, slot});
+  }
+  renderVolunteers(); renderShifts();
+}
+function removeAvailability(id, day, slot){
+  const v = volunteers.find(v=>v.id===id); if(!v) return;
+  v.availability = v.availability.filter(a=>!(a.day===day && a.slot===slot));
+  renderVolunteers(); renderShifts();
+}
+
+// --- Shift actions ---
+function addShift(){
+  shifts.push({id:++sCounter, role:'New Shift', day:'Mon', slot:'AM', spots:1, skillRequired:''});
+  renderShifts();
+}
+function deleteShift(id){
+  shifts = shifts.filter(s=>s.id!==id);
+  renderShifts();
+}
+function updateShiftRole(id, val){ const s = shifts.find(s=>s.id===id); if(s) s.role = val; }
+function updateShiftDay(id, val){ const s = shifts.find(s=>s.id===id); if(s) s.day = val; renderShifts(); }
+function updateShiftSlot(id, val){ const s = shifts.find(s=>s.id===id); if(s) s.slot = val; renderShifts(); }
+function updateShiftSpots(id, val){
+  const s = shifts.find(s=>s.id===id); if(!s) return;
+  let n = parseInt(val,10); if(isNaN(n) || n<1) n=1;
+  s.spots = n; renderShifts();
+}
+function toggleShiftSkill(id, checked){
+  const s = shifts.find(s=>s.id===id); if(!s) return;
+  s.skillRequired = checked ? 'Driver' : '';
+  renderShifts();
+}
+
+// --- Matching algorithm: most-constrained-shift-first greedy assignment ---
+function runMatching(){
+  const volPool = volunteers.map(v=>({...v, assigned:false}));
+  let unresolved = shifts.map(s=>({...s, assignedNames:[]}));
+  const resolved = [];
+
+  while(unresolved.length){
+    const withCounts = unresolved.map(s=>{
+      const stillNeeded = s.spots - s.assignedNames.length;
+      const elig = eligibleVolunteersFor(s, volPool.filter(v=>!v.assigned));
+      return {shift:s, elig, stillNeeded};
+    });
+    withCounts.sort((a,b)=> a.elig.length - b.elig.length);
+    const chosen = withCounts[0];
+    const take = chosen.elig.slice(0, chosen.stillNeeded);
+    take.forEach(v=>{
+      const poolV = volPool.find(pv=>pv.id===v.id);
+      poolV.assigned = true;
+      chosen.shift.assignedNames.push(poolV.name);
+    });
+    resolved.push(chosen.shift);
+    unresolved = unresolved.filter(s=>s.id !== chosen.shift.id);
+  }
+
+  renderResults(resolved);
+}
+
+function renderResults(resultShifts){
+  const total = resultShifts.length;
+  const fullyStaffed = resultShifts.filter(s=>s.assignedNames.length >= s.spots).length;
+  const shortStaffed = total - fullyStaffed;
+  const totalSpots = resultShifts.reduce((sum,s)=>sum+s.spots,0);
+  const totalFilled = resultShifts.reduce((sum,s)=>sum+s.assignedNames.length,0);
+
+  let html = `
+    <div class="stats-bar">
+      <div class="stat"><span class="num">${fullyStaffed}/${total}</span><span class="lbl">Shifts fully staffed</span></div>
+      <div class="stat"><span class="num ${shortStaffed>0?'short':''}">${shortStaffed}</span><span class="lbl">Shifts short-staffed</span></div>
+      <div class="stat"><span class="num">${totalFilled}/${totalSpots}</span><span class="lbl">Volunteer spots filled</span></div>
+    </div>`;
+
+  const unfilled = resultShifts.filter(s=>s.assignedNames.length < s.spots);
+  if(unfilled.length){
+    html += `<div class="unfilled-section"><h3>⚠️ Shifts needing more volunteers</h3>`;
+    unfilled.forEach(s=>{
+      const short = s.spots - s.assignedNames.length;
+      html += `
+        <div class="unfilled-item">
+          <div>
+            <div class="role">${escapeHtml(s.role)}</div>
+            <div class="meta">${DAY_LABELS[s.day]} · ${SLOT_LABELS[s.slot]}${s.skillRequired?` · requires ${s.skillRequired}`:''}</div>
+          </div>
+          <div class="short-badge">Needs ${short} more</div>
+        </div>`;
+    });
+    html += `</div>`;
+  } else {
+    html += `<div class="all-filled-note">✓ Every shift is fully staffed with this volunteer pool.</div>`;
+  }
+
+  html += `<div class="full-schedule">`;
+  DAYS.forEach(day=>{
+    const dayShifts = resultShifts.filter(s=>s.day===day);
+    if(!dayShifts.length) return;
+    html += `<div class="day-group"><h3>${DAY_LABELS[day]}</h3>`;
+    dayShifts.forEach(s=>{
+      const isFull = s.assignedNames.length >= s.spots;
+      html += `
+        <div class="shift-card ${isFull?'':'short'}">
+          <div class="shift-card-top">
+            <div>
+              <span class="shift-role">${escapeHtml(s.role)}</span>
+              <span class="shift-time"> — ${SLOT_LABELS[s.slot]}${s.skillRequired?` · requires ${s.skillRequired}`:''}</span>
+            </div>
+            <span class="fill-badge ${isFull?'full':'short'}">${s.assignedNames.length}/${s.spots} filled</span>
+          </div>
+          ${s.assignedNames.length
+            ? `<div class="assigned-list">${s.assignedNames.map(n=>`<span class="assigned-chip">${escapeHtml(n)}</span>`).join('')}</div>`
+            : `<div class="assigned-empty">No one assigned yet</div>`}
+        </div>`;
+    });
+    html += `</div>`;
+  });
+  html += `</div>`;
+
+  const section = document.getElementById('resultsSection');
+  section.innerHTML = html;
+  section.classList.remove('hidden');
+  section.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function resetSample(){
+  sampleData();
+  renderVolunteers();
+  renderShifts();
+  document.getElementById('resultsSection').classList.add('hidden');
+}
+
+sampleData();
+renderVolunteers();
+renderShifts();
+</script>
+</body>
+</html>

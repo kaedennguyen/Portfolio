@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP — Grant Fit Scanner</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  :root{
+    --navy-deep:#0B1526; --navy:#11223E; --navy-panel:#152A4C; --navy-line:#223A63;
+    --blue:#3B7CF2; --blue-light:#6FA1FF;
+    --off:#F3F6FB; --off-line:#E1E7F0;
+    --text-dark:#141B2B; --text-dim-dark:#5B6577; --text-faint-dark:#8892A3;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:'Inter',sans-serif; background:var(--off); color:var(--text-dark); }
+  a{ color:var(--blue); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+  h1,h2{ font-family:'Plus Jakarta Sans',sans-serif; margin:0; }
+  header{ background:var(--navy-deep); padding:56px 32px 44px; border-bottom:1px solid var(--navy-line); }
+  .wrap{ max-width:760px; margin:0 auto; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--blue-light); margin:0 0 12px; }
+  header h1{ color:#fff; font-weight:800; font-size:32px; }
+  header p{ color:#A9B8D6; font-size:15px; line-height:1.7; margin-top:14px; max-width:600px; }
+  main{ padding:52px 32px 80px; }
+  .step{ display:flex; gap:20px; margin-bottom:34px; }
+  .step-num{
+    flex-shrink:0; width:34px; height:34px; border-radius:8px; background:#E9EFFC; color:var(--blue);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .step h2{ font-size:17px; font-weight:700; margin-bottom:6px; }
+  .step p{ font-size:14.5px; line-height:1.7; color:var(--text-dim-dark); margin:0 0 8px; }
+  .step ul{ margin:8px 0 0; padding-left:20px; font-size:14.5px; line-height:1.75; color:var(--text-dim-dark); }
+  .step li{ margin-bottom:5px; }
+  .note-box{
+    background:#fff; border:1px solid var(--off-line); border-left:3px solid var(--blue);
+    border-radius:8px; padding:16px 20px; font-size:13.5px; line-height:1.65; color:var(--text-dim-dark);
+    margin-top:32px;
+  }
+  .note-box strong{ color:var(--text-dark); }
+  .back{ display:inline-block; margin-top:36px; font-size:13.5px; font-weight:600; }
+  footer{ background:var(--navy-deep); padding:22px; text-align:center; }
+  footer p{ font-size:12px; color:#7488AE; margin:0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow">Standard Operating Procedure</p>
+    <h1>Grant Fit Scanner</h1>
+    <p>How a staff member at Harvest Table Food Bank would actually use this tool to decide which grants are worth applying for this month.</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <h2>Open the scanner and check the top-line numbers</h2>
+        <p>The header shows three things at a glance: total opportunities found, how many are High fit, and how many have a deadline inside 30 days. Start here every time — the deadline count tells you if anything is urgent before you read a single grant description.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <h2>Filter down to High fit first</h2>
+        <p>Click the <strong>High</strong> filter button. These are the grants worth a real application this cycle. Only move to Medium once High-fit options are handled or exhausted — Medium-fit grants are worth a lighter-effort attempt (like a local retail giving program), not a full proposal.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <h2>Sort by soonest deadline</h2>
+        <p>Use the sort toggle to put the closest deadline at the top. Anything due in under two weeks needs a same-day go/no-go decision from whoever owns grant writing — don't let a High-fit grant slip past its deadline while still "under review."</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div>
+        <h2>Read the rationale and the "Watch for" line on each card</h2>
+        <p>Every grant explains, in plain language, why it scored the way it did. The "Watch for" line flags the catch — a matching-funds requirement, a per-location application rule, a narrower service area than it first appears. Read this before committing staff time, not after.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div>
+        <h2>Use the search box for a known funder</h2>
+        <p>If someone asks "are we already tracking the Kroger grant," type the funder name into the search box rather than scrolling the full list.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">6</div>
+      <div>
+        <h2>Log a decision, don't just close the tab</h2>
+        <p>For every High-fit grant, record one of three outcomes somewhere your team can see it:</p>
+        <ul>
+          <li><strong>Applying</strong> — assign an owner and the deadline</li>
+          <li><strong>Passing</strong> — note why, so it doesn't get re-researched next cycle</li>
+          <li><strong>Needs more info</strong> — note what's missing before a decision can be made</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>Good to know:</strong> this demo uses a fixed, sample list of 8 real-shaped grant opportunities for a fictional org, Valley Community Food Bank. In real use, the same tool would be re-run periodically (e.g. monthly) against live search results so the list of opportunities stays current.
+    </div>
+
+    <a class="back" href="../index.html">← Back to portfolio</a>
+  </div>
+</main>
+
+<footer>
+  <p>Harvest Table / Valley Community Food Bank — sample data, not a real organization</p>
+</footer>
+
+</body>
+</html>

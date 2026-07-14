@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How I Built the Grant Scanner — Technical</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  :root{
+    --navy-deep:#0B1526; --navy-line:#223A63; --blue:#3B7CF2; --blue-light:#6FA1FF;
+    --off:#F3F6FB; --off-line:#E1E7F0; --text-dark:#141B2B; --text-dim-dark:#5B6577;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:'Inter',sans-serif; background:var(--off); color:var(--text-dark); }
+  a{ color:var(--blue); text-decoration:none; } a:hover{ text-decoration:underline; }
+  h1,h2{ font-family:'Plus Jakarta Sans',sans-serif; margin:0; }
+  header{ background:var(--navy-deep); padding:56px 32px 44px; border-bottom:1px solid var(--navy-line); }
+  .wrap{ max-width:720px; margin:0 auto; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--blue-light); margin:0 0 12px; }
+  header h1{ color:#fff; font-weight:800; font-size:28px; line-height:1.3; }
+  header p.tag{ color:#A9B8D6; font-size:14px; margin-top:14px; font-style:italic; }
+  main{ padding:52px 32px 80px; font-size:15.5px; line-height:1.8; color:var(--text-dim-dark); }
+  main h2{ font-size:19px; color:var(--text-dark); margin-top:44px; margin-bottom:14px; }
+  main h2:first-child{ margin-top:0; }
+  main p{ margin:0 0 16px; }
+  main ol, main ul{ padding-left:22px; margin:0 0 16px; }
+  main li{ margin-bottom:10px; }
+  main strong{ color:var(--text-dark); }
+  main code{ font-family:'IBM Plex Mono',monospace; font-size:13.5px; background:#E9EFFC; color:#1d3a8f; padding:2px 6px; border-radius:4px; }
+  .back{ display:inline-block; margin-top:36px; font-size:13.5px; font-weight:600; }
+  footer{ background:var(--navy-deep); padding:22px; text-align:center; }
+  footer p{ font-size:12px; color:#7488AE; margin:0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow">How I Built It — Technical</p>
+    <h1>The Grant Fit Scanner</h1>
+    <p class="tag">Written for someone who already knows how to use Claude. This documents the actual prompting and workflow, step by step, so it can be reproduced or adapted.</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <h2>The setup</h2>
+    <p>I gave Claude a single upfront prompt that specified the full pipeline and the order of operations, rather than prompting turn-by-turn. This matters: for a multi-stage task (gather profile → research → build tool → explain → suggest next steps), front-loading the sequence in one message keeps Claude from skipping steps or collapsing them together.</p>
+    <p>The prompt specified:</p>
+    <ol>
+      <li>Ask for the nonprofit profile first (or offer a sample if I didn't have a real org)</li>
+      <li>Actually search the web for real grants — no invented ones</li>
+      <li>Build the results as an interactive artifact, not a text list</li>
+      <li>Explain the design choices in plain English</li>
+      <li>Suggest realistic "next feature" ideas</li>
+    </ol>
+    <p>I also explicitly flagged the thing most likely to fail silently: <em>"if it doesn't search on its own, just say 'search the web for real grant opportunities' again."</em> That's a fallback instruction for a known failure mode — Claude can sometimes answer research-shaped questions from training knowledge instead of using the search tool, and calling that out upfront reduces the odds of it happening.</p>
+
+    <h2>Step 1 — Profile elicitation</h2>
+    <p>Claude asked whether I had a real org or wanted a sample profile. I chose sample. It generated a plausible mid-sized Ohio food bank (mission statement, four program areas, budget, location) and used that as the fixed research target for the rest of the session. Key point: I let it define the sample rather than specifying one myself, since the goal was speed, and a generic "food bank" profile is realistic enough to research against meaningfully.</p>
+
+    <h2>Step 2 — Actual web research, not synthesis</h2>
+    <p>This was the step to watch closely. I asked Claude to run real <code>web_search</code> calls against the profile — not to write plausible-sounding grant names from memory. It ran roughly six distinct searches, each narrower than the last:</p>
+    <ul>
+      <li>general hunger-relief grants</li>
+      <li>a named corporate funder (Kroger Zero Hunger | Zero Waste) for eligibility and deadline specifics</li>
+      <li>a second named corporate funder (Walmart Foundation)</li>
+      <li>state-specific grants (Ohio)</li>
+    </ul>
+    <p>Each search pulled from primary or near-primary sources (funder websites, Instrumentl, GrantWatch, Candid/Foundation Directory) rather than aggregator blog posts alone. I could verify this because Claude cited its sources inline with the specific claims, which is the tell that it's actually grounding the output rather than hallucinating funder names.</p>
+    <p>The output included two intentionally <strong>low-fit</strong> grants (a hyper-local Ohio Valley community foundation fund, and a USDA retail-expansion program) that read as close matches on paper but fail on geography or program structure. Including near-misses, not just wins, is what makes a fit-scoring system credible — if I'd only asked for "grants that match," Claude would have had no incentive to surface the ones that don't, and the tool would look like a keyword search wearing a scoring badge.</p>
+
+    <h2>Step 3 — Artifact generation</h2>
+    <p>I asked for "a simple interactive artifact (a webpage/tool I can actually use and click through)" rather than a document. Claude built a single self-contained HTML file with embedded CSS and JS — no external dependencies beyond a Google Fonts import — containing:</p>
+    <ul>
+      <li>a static JS array of the 8 real grants (name, funder, deadline, amount, fit tier, numeric score, rationale, caveat)</li>
+      <li>filter buttons (All / High / Medium / Low)</li>
+      <li>a sort toggle (deadline soonest/furthest)</li>
+      <li>a live search box</li>
+      <li>render logic that re-filters and re-sorts on every interaction</li>
+    </ul>
+    <p>Because this was a one-off deliverable rather than a component meant for reuse in a larger app, plain HTML/CSS/JS was the right call over React — no build step, opens directly in a browser, and is trivial to hand off or extend later.</p>
+
+    <h2>Step 4 — The explanation layer</h2>
+    <p>I asked Claude to explain, in plain English, why it organized the tool the way it did — deadline-first sorting, the four-factor fit score, the flag system — specifically so I could describe the reasoning intelligently in an application essay without having originated the design logic myself. This is worth doing deliberately with Claude: ask it to externalize its own design rationale as a separate deliverable, not just build silently.</p>
+
+    <h2>Step 5 — Forward-looking features</h2>
+    <p>Finally I asked for 2–3 realistic "next features" — deadline auto-tracking, LOI drafting, an outcome-tracking feedback loop — framed as things worth mentioning in an interview to demonstrate roadmap thinking, without requiring me to actually build them in this pass.</p>
+
+    <h2>Reusable pattern</h2>
+    <p>The general shape here — <strong>profile/context gathering → live research with real tool calls → interactive artifact → self-explanation → forward-looking roadmap</strong> — is a reusable prompt structure for any "research this, then build a tool around what you found" task. The two levers that mattered most were (1) explicitly demanding real search over synthesized-sounding output, and (2) asking for the design rationale as a distinct, separate output rather than assuming I'd be able to reverse-engineer it from the artifact alone.</p>
+
+    <a class="back" href="../index.html">← Back to portfolio</a>
+  </div>
+</main>
+
+<footer>
+  <p>Kaeden Nguyen — Portfolio for Claude Corps Fellowship application</p>
+</footer>
+
+</body>
+</html>
