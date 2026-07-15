@@ -1,0 +1,221 @@
+.wag-container {
+	max-width: 760px;
+	margin: 0 auto;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.wag-form {
+	margin-bottom: 24px;
+}
+
+.wag-intro {
+	background: #f0f6ff;
+	border: 1px solid #d1e4ff;
+	border-radius: 10px;
+	padding: 16px 18px;
+	margin-bottom: 20px;
+}
+
+.wag-intro p {
+	margin: 0;
+	font-size: 14px;
+	line-height: 1.6;
+	color: #1a3a5c;
+}
+
+.wag-contact {
+	text-align: center;
+	font-size: 13px;
+	color: #667085;
+	margin-top: 28px;
+	padding-top: 16px;
+	border-top: 1px solid #e4e7ec;
+}
+
+.wag-contact a {
+	color: #1a1a2e;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.wag-contact a:hover {
+	text-decoration: underline;
+}
+
+.wag-label {
+	display: block;
+	font-weight: 600;
+	margin-bottom: 8px;
+	font-size: 15px;
+}
+
+.wag-input-row {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.wag-input-row input[type="url"] {
+	flex: 1 1 300px;
+	padding: 12px 14px;
+	font-size: 15px;
+	border: 1px solid #d0d5dd;
+	border-radius: 8px;
+}
+
+.wag-input-row button {
+	padding: 12px 22px;
+	font-size: 15px;
+	font-weight: 600;
+	background: #1a1a2e;
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.wag-input-row button:hover {
+	background: #16213e;
+}
+
+.wag-input-row button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.wag-loading {
+	text-align: center;
+	padding: 40px 0;
+}
+
+.wag-spinner {
+	width: 36px;
+	height: 36px;
+	border: 4px solid #e4e7ec;
+	border-top-color: #1a1a2e;
+	border-radius: 50%;
+	margin: 0 auto 14px;
+	animation: wag-spin 0.8s linear infinite;
+}
+
+@keyframes wag-spin {
+	to { transform: rotate(360deg); }
+}
+
+.wag-error {
+	background: #fef2f2;
+	border: 1px solid #fecaca;
+	color: #991b1b;
+	padding: 14px 16px;
+	border-radius: 8px;
+	margin-bottom: 20px;
+}
+
+/* Overall score header */
+.wag-overall {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	padding: 24px;
+	border-radius: 12px;
+	background: #f8f9fb;
+	border: 1px solid #e4e7ec;
+	margin-bottom: 24px;
+}
+
+.wag-overall-circle {
+	width: 90px;
+	height: 90px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 28px;
+	font-weight: 700;
+	color: #fff;
+	flex-shrink: 0;
+}
+
+.wag-overall-meta h2 {
+	margin: 0 0 4px;
+	font-size: 20px;
+}
+
+.wag-overall-meta p {
+	margin: 0;
+	color: #667085;
+	font-size: 14px;
+}
+
+/* Category cards */
+.wag-category {
+	border: 1px solid #e4e7ec;
+	border-radius: 10px;
+	margin-bottom: 16px;
+	overflow: hidden;
+}
+
+.wag-category-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 16px 18px;
+	background: #fafbfc;
+	cursor: pointer;
+}
+
+.wag-category-header h3 {
+	margin: 0;
+	font-size: 16px;
+}
+
+.wag-category-score {
+	font-weight: 700;
+	font-size: 16px;
+}
+
+.wag-category-body {
+	padding: 4px 18px 16px;
+	display: none;
+}
+
+.wag-category.wag-open .wag-category-body {
+	display: block;
+}
+
+.wag-finding {
+	padding: 8px 0;
+	border-bottom: 1px solid #f0f1f3;
+	font-size: 14px;
+	line-height: 1.5;
+	display: flex;
+	gap: 8px;
+}
+
+.wag-finding:last-child {
+	border-bottom: none;
+}
+
+.wag-finding-icon {
+	flex-shrink: 0;
+	width: 18px;
+}
+
+.wag-finding.good { color: #067647; }
+.wag-finding.warning { color: #b54708; }
+.wag-finding.issue { color: #b42318; }
+.wag-finding.improvement { color: #175cd3; }
+.wag-finding.summary { color: #344054; font-style: italic; }
+
+.wag-note {
+	font-size: 12px;
+	color: #98a2b3;
+	margin-top: 8px;
+}
+
+.wag-score-a { background: #12b76a; }
+.wag-score-b { background: #4ca30d; }
+.wag-score-c { background: #f79009; }
+.wag-score-d { background: #f04438; }
+.wag-score-f { background: #98a2b3; }
