@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Website Audit Generator — SOP</title>
+<style>
+  :root {
+    --navy: #1a1a2e;
+    --blue: #1f5fa8;
+    --grey: #667085;
+    --light: #f0f6ff;
+    --border: #e4e7ec;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    color: #1d1d1f;
+    line-height: 1.6;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+    background: #fff;
+  }
+  .cover {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .cover h1 {
+    font-size: 30px;
+    letter-spacing: 0.5px;
+    color: var(--navy);
+    margin: 0 0 6px;
+  }
+  .cover .subtitle {
+    font-size: 19px;
+    color: var(--blue);
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 16px 0 24px;
+    font-size: 14.5px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: var(--navy);
+    color: #fff;
+    font-weight: 600;
+  }
+  tr:nth-child(even) td {
+    background: #fafbfc;
+  }
+  .meta-table td:first-child {
+    font-weight: 600;
+    width: 200px;
+    background: #fafbfc;
+  }
+  h2 {
+    font-size: 23px;
+    color: var(--navy);
+    border-bottom: 2px solid var(--navy);
+    padding-bottom: 8px;
+    margin-top: 46px;
+    margin-bottom: 16px;
+  }
+  h3 {
+    font-size: 18px;
+    color: var(--blue);
+    margin-top: 30px;
+    margin-bottom: 10px;
+  }
+  h4 {
+    font-size: 16px;
+    color: var(--navy);
+    margin-top: 22px;
+    margin-bottom: 8px;
+  }
+  p { font-size: 15px; margin: 0 0 14px; }
+  ul, ol { font-size: 15px; margin: 0 0 16px; padding-left: 24px; }
+  li { margin-bottom: 6px; }
+  .note {
+    background: var(--light);
+    border-left: 4px solid var(--blue);
+    padding: 12px 16px;
+    margin: 12px 0 22px;
+    font-size: 14.5px;
+    border-radius: 4px;
+  }
+  .note.warn { border-left-color: #b54708; }
+  .note strong { color: var(--blue); }
+  .note.warn strong { color: #b54708; }
+  .contact-block {
+    text-align: center;
+    background: var(--light);
+    border-radius: 8px;
+    padding: 18px;
+    margin: 16px 0 24px;
+  }
+  .contact-block a {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--blue);
+    text-decoration: none;
+  }
+  .toc {
+    background: #fafbfc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 40px;
+  }
+  .toc h2 {
+    margin-top: 0;
+    border: none;
+    font-size: 18px;
+  }
+  .toc ol {
+    padding-left: 20px;
+    font-size: 14.5px;
+  }
+  .toc a {
+    color: var(--navy);
+    text-decoration: none;
+  }
+  .toc a:hover { text-decoration: underline; }
+  code {
+    background: #f0f1f3;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13.5px;
+  }
+  .page-footer {
+    text-align: center;
+    color: var(--grey);
+    font-size: 13px;
+    margin-top: 60px;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+  @media print {
+    body { padding: 0 20px; }
+    h2 { page-break-before: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>STANDARD OPERATING PROCEDURE</h1>
+  <div class="subtitle">Website Audit Generator (WordPress Plugin)</div>
+  <table class="meta-table">
+    <tr><td>Document Owner</td><td>Mediavines Corp</td></tr>
+    <tr><td>Contact</td><td><a href="mailto:mediavinescorp@gmail.com">mediavinescorp@gmail.com</a></td></tr>
+    <tr><td>System</td><td>Website Audit Generator — WordPress plugin</td></tr>
+    <tr><td>Version</td><td>1.1.0 (adds GEO scoring, concurrent API execution, intro/contact copy)</td></tr>
+    <tr><td>Last Updated</td><td>July 15, 2026</td></tr>
+    <tr><td>Classification</td><td>Internal use / portfolio project</td></tr>
+  </table>
+</div>
+
+<div class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#sec1">Purpose & Scope</a></li>
+    <li><a href="#sec2">System Overview</a></li>
+    <li><a href="#sec3">Prerequisites</a></li>
+    <li><a href="#sec4">Installation Procedure</a></li>
+    <li><a href="#sec5">Configuration Procedure</a></li>
+    <li><a href="#sec6">Standard Operating Procedure — Running an Audit</a></li>
+    <li><a href="#sec7">Maintenance Procedures</a></li>
+    <li><a href="#sec8">Troubleshooting Guide</a></li>
+    <li><a href="#sec9">Escalation & Support</a></li>
+    <li><a href="#sec10">Change Log</a></li>
+  </ol>
+</div>
+
+<h2 id="sec1">1. Purpose & Scope</h2>
+<p>This SOP documents how to install, configure, operate, maintain, and troubleshoot the Website Audit Generator — a WordPress plugin that lets a site visitor enter a URL and receive an automated audit scored across five categories: SEO, AEO, GEO, Content, and Design & UX.</p>
+<p>This document is intended for the plugin administrator (site owner) responsible for installation, API key management, and ongoing monitoring. It is not an end-user manual for site visitors — visitor-facing instructions are built into the tool itself as an on-page intro message.</p>
+
+<h3>1.1 In Scope</h3>
+<ul>
+  <li>Installing and configuring the plugin on a WordPress site</li>
+  <li>Publishing the audit tool via shortcode</li>
+  <li>Monitoring API usage, cost, and daily limits</li>
+  <li>Troubleshooting common failure modes (timeouts, rate limits, blocked requests)</li>
+  <li>Routine maintenance and update procedures</li>
+</ul>
+
+<h3>1.2 Out of Scope</h3>
+<ul>
+  <li>General WordPress hosting/server administration</li>
+  <li>Visual/screenshot-based design critique (not implemented — see Section 3.2 of the plugin's design)</li>
+  <li>Auditing JavaScript-rendered (client-side-only) websites with full accuracy (see Section 8.4)</li>
+</ul>
+
+<h2 id="sec2">2. System Overview</h2>
+<p>The plugin is fully self-contained within WordPress — there is no separate backend server. It calls two external services at audit time:</p>
+<ul>
+  <li>Google PageSpeed Insights API — free, provides performance/accessibility/SEO signals</li>
+  <li>Anthropic Claude API — paid per-use, provides qualitative judgment (AEO, GEO, Content, Design commentary)</li>
+</ul>
+
+<h3>2.1 Architecture Summary</h3>
+<p>When a visitor submits a URL:</p>
+<ol>
+  <li>The plugin fetches and parses the target page's raw HTML server-side (PHP DOMDocument) — no headless browser rendering is performed.</li>
+  <li>It builds four independent Claude requests (AEO, GEO, Content, Design) plus one PageSpeed request.</li>
+  <li>All requests fire <strong>concurrently</strong> via curl_multi, not sequentially, to stay within PHP execution time limits.</li>
+  <li>Each category analyzer (SEO, AEO, GEO, Content, Design) combines deterministic structural scoring with the Claude qualitative result.</li>
+  <li>A weighted overall score (0–100, graded A–F) is computed and displayed, with results cached to reduce repeat API cost.</li>
+</ol>
+
+<h3>2.2 File Structure Reference</h3>
+<table>
+  <tr><th>File</th><th>Responsibility</th></tr>
+  <tr><td>website-audit-generator.php</td><td>Plugin bootstrap, asset loading, activation defaults</td></tr>
+  <tr><td>includes/class-wag-settings.php</td><td>Admin settings page (API keys, limits, cache)</td></tr>
+  <tr><td>includes/class-wag-html-parser.php</td><td>Fetches & parses target site HTML</td></tr>
+  <tr><td>includes/class-wag-concurrent-http.php</td><td>Fires PageSpeed + Claude calls in parallel</td></tr>
+  <tr><td>includes/class-wag-pagespeed-api.php</td><td>PageSpeed request/response handling</td></tr>
+  <tr><td>includes/class-wag-claude-api.php</td><td>Claude request/response handling</td></tr>
+  <tr><td>includes/class-wag-seo-analyzer.php</td><td>SEO scoring (no API cost)</td></tr>
+  <tr><td>includes/class-wag-aeo-analyzer.php</td><td>AEO scoring (structural + Claude)</td></tr>
+  <tr><td>includes/class-wag-geo-analyzer.php</td><td>GEO scoring (structural + Claude)</td></tr>
+  <tr><td>includes/class-wag-content-analyzer.php</td><td>Content scoring (readability + Claude)</td></tr>
+  <tr><td>includes/class-wag-design-analyzer.php</td><td>Design/UX scoring (structural + Claude)</td></tr>
+  <tr><td>includes/class-wag-audit-engine.php</td><td>Orchestrates all analyzers, weighting, caching</td></tr>
+  <tr><td>includes/class-wag-shortcode.php</td><td>Renders form/results, handles AJAX</td></tr>
+  <tr><td>assets/css/audit-style.css</td><td>Front-end styling</td></tr>
+  <tr><td>assets/js/audit-script.js</td><td>Front-end form submission & results rendering</td></tr>
+</table>
+
+<h3>2.3 Scoring Categories & Weights</h3>
+<table>
+  <tr><th>Category</th><th>Weight</th><th>What it measures</th></tr>
+  <tr><td>SEO</td><td>25%</td><td>Title/meta tags, headings, schema, links, PageSpeed SEO + Performance scores</td></tr>
+  <tr><td>AEO</td><td>20%</td><td>Answer Engine Optimization — readiness for featured snippets/voice search (FAQ schema, question headings)</td></tr>
+  <tr><td>GEO</td><td>20%</td><td>Generative Engine Optimization — likelihood of being cited by AI systems like ChatGPT/Perplexity (freshness, authorship, authority)</td></tr>
+  <tr><td>Content</td><td>20%</td><td>Readability (Flesch), word count, qualitative content-gap analysis</td></tr>
+  <tr><td>Design & UX</td><td>15%</td><td>Structural HTML analysis + PageSpeed accessibility/best-practices (no visual/screenshot review)</td></tr>
+</table>
+<div class="note"><strong>NOTE:</strong> AEO and GEO are related but distinct: AEO asks whether content is structured to be pulled into a direct-answer box; GEO asks whether a generative AI would cite the page as a source when synthesizing an answer.</div>
+
+<h2 id="sec3">3. Prerequisites</h2>
+<h3>3.1 Requirements</h3>
+<ul>
+  <li>WordPress 5.8 or later</li>
+  <li>PHP 7.4 or later, with the curl extension enabled (curl_multi is used for concurrent API calls; the plugin falls back to sequential calls automatically if unavailable)</li>
+  <li>A hosting plan that allows outbound HTTP requests to googleapis.com and api.anthropic.com</li>
+</ul>
+
+<h3>3.2 Required Accounts / Keys</h3>
+<table>
+  <tr><th>Key</th><th>Required?</th><th>Where to get it</th></tr>
+  <tr><td>Claude API key</td><td>Required</td><td>console.anthropic.com — used for AEO, GEO, Content, and Design qualitative analysis</td></tr>
+  <tr><td>Google PageSpeed API key</td><td>Optional (recommended)</td><td>console.cloud.google.com — enable the "PageSpeed Insights API"; raises rate limits above the free unauthenticated tier</td></tr>
+</table>
+
+<h2 id="sec4">4. Installation Procedure</h2>
+<ol>
+  <li>Download the plugin zip file (<code>website-audit-generator.zip</code>).</li>
+  <li>In WordPress admin, go to <strong>Plugins → Add New → Upload Plugin</strong>.</li>
+  <li>Select the zip file and click <strong>Install Now</strong>.</li>
+  <li>Click <strong>Activate</strong> once installation completes.</li>
+</ol>
+<div class="note warn"><strong>IF THIS FAILS:</strong> Confirm the PHP version meets the 7.4+ requirement (Tools → Site Health → Info → Server in WordPress admin).</div>
+
+<h2 id="sec5">5. Configuration Procedure</h2>
+<h3>5.1 Adding API Keys</h3>
+<ol>
+  <li>Go to <strong>Settings → Audit Generator</strong> in the WordPress admin sidebar.</li>
+  <li>Paste the Claude API key into the "Claude API Key" field. This is required — without it, AEO/GEO/Content/Design scores will fall back to structural-signal-only scoring and display a warning.</li>
+  <li>(Optional) Paste the Google PageSpeed API key into the "Google PageSpeed API Key" field.</li>
+  <li>Confirm the "Claude Model" field reads <code>claude-sonnet-5</code> (the current recommended default as of this document's last update).</li>
+  <li>Set the "Daily Audit Limit" — default 25/day site-wide. Adjust based on expected traffic and acceptable API spend.</li>
+  <li>Set "Result Cache (hours)" — default 24. Repeat audits of the same URL within this window are served from cache at no additional API cost.</li>
+  <li>Click <strong>Save Changes</strong>.</li>
+</ol>
+
+<h3>5.2 Publishing the Audit Tool</h3>
+<ol>
+  <li>Create or edit the WordPress page/post where the tool should appear.</li>
+  <li>Add the shortcode: <code>[website_audit_generator]</code></li>
+  <li>Publish or update the page.</li>
+</ol>
+<p>The published page will show an intro message explaining the five scoring categories, a URL input field, and (after submission) the full audit results with the contact email displayed at the bottom.</p>
+
+<h2 id="sec6">6. Standard Operating Procedure — Running an Audit</h2>
+<p>This describes the expected end-to-end flow for a site visitor using the published tool.</p>
+<ol>
+  <li>Visitor lands on the page containing the <code>[website_audit_generator]</code> shortcode and reads the intro message.</li>
+  <li>Visitor enters a URL (must begin with <code>http://</code> or <code>https://</code>) and clicks "Audit My Site".</li>
+  <li>The tool shows a loading spinner with the message "Running your audit — this can take 15–30 seconds…"</li>
+  <li>On success, results display: an overall score/grade circle, followed by five collapsible category cards (SEO, AEO, GEO, Content, Design & UX), each expandable to show individual findings marked as good / warning / issue / improvement / summary.</li>
+  <li>A contact line at the bottom invites further inquiries to mediavinescorp@gmail.com.</li>
+</ol>
+<div class="note"><strong>NOTE:</strong> If the same URL was audited within the cache window (default 24 hours), the cached result is served instantly and labeled "cached result" in the UI — no new API calls are made.</div>
+
+<h2 id="sec7">7. Maintenance Procedures</h2>
+<h3>7.1 Routine Monitoring (Recommended: Weekly)</h3>
+<ul>
+  <li>Check Anthropic Console (console.anthropic.com) for API usage/spend.</li>
+  <li>Check Google Cloud Console for PageSpeed API quota usage (free tier: 25,000 requests/day).</li>
+  <li>Spot-check a known URL to confirm the tool still returns results end-to-end.</li>
+</ul>
+
+<h3>7.2 Cost Control Checklist</h3>
+<ul>
+  <li>Daily Audit Limit is set to a sensible ceiling for expected traffic.</li>
+  <li>Result Cache is enabled (non-zero) to avoid paying for repeat audits of the same URL.</li>
+  <li>Claude model is set to the most current cost-effective model (check Anthropic's pricing page periodically, as model names/pricing change over time).</li>
+</ul>
+
+<h3>7.3 Updating the Plugin</h3>
+<ol>
+  <li>Deactivate the current version in Plugins → Installed Plugins (settings/API keys are preserved in the database and are not lost on deactivation).</li>
+  <li>Delete the old plugin files or upload the new zip to overwrite them via SFTP/hosting file manager.</li>
+  <li>Reactivate the plugin.</li>
+  <li>Re-verify Settings → Audit Generator still shows the correct API keys and run a test audit.</li>
+</ol>
+
+<h2 id="sec8">8. Troubleshooting Guide</h2>
+
+<h4>8.1 Audit hangs / never returns a result</h4>
+<p><strong>Cause:</strong> Historically, PageSpeed + Claude calls ran sequentially and could combine to exceed 2+ minutes, surpassing most hosts' PHP execution time limit.</p>
+<p><strong>Fix implemented (v1.1+):</strong> All four external API calls now run concurrently via curl_multi with a hard 60-second batch ceiling, and the AJAX handler sets a 90-second execution time budget. If this still occurs:</p>
+<ul>
+  <li>Confirm the host's <code>max_execution_time</code> is at least 90 seconds (check with hosting support or php.ini).</li>
+  <li>Confirm curl_multi is enabled on the server (rare hosts disable it — the plugin falls back to sequential calls automatically, which will be slower).</li>
+</ul>
+
+<h4>8.2 HTTP 429 errors</h4>
+<p>This can originate from three different places — the error message now specifies which:</p>
+<table>
+  <tr><th>Source</th><th>Meaning</th><th>Fix</th></tr>
+  <tr><td>Target website</td><td>The site being audited is rate-limiting or blocking automated requests (bot protection/WAF)</td><td>Not fixable from the plugin side beyond looking browser-like; retry later or on a different page of the same site</td></tr>
+  <tr><td>Google PageSpeed API</td><td>Unauthenticated quota exceeded</td><td>Add a PageSpeed API key under Settings → Audit Generator</td></tr>
+  <tr><td>Claude API</td><td>Account rate limit reached</td><td>Wait and retry, or review rate limits at console.anthropic.com</td></tr>
+</table>
+
+<h4>8.3 "Invalid URL" or fetch failures</h4>
+<ul>
+  <li>Confirm the URL includes <code>http://</code> or <code>https://</code> — required by validation.</li>
+  <li>A 403 response means the target site's bot protection blocked the request outright.</li>
+  <li>Check the "Could not fetch the target URL" error text for the specific underlying reason — it is surfaced directly from the target server's response.</li>
+</ul>
+
+<h4>8.4 Inaccurate word count / content score on a specific site</h4>
+<p>This is expected behavior, not a bug, for JavaScript-rendered (client-side-only) sites — e.g. a bare React/Vue shell with no server-rendered HTML. The plugin reads only the raw HTML response; it does not execute JavaScript. Content-heavy static or server-rendered pages (most WordPress sites) are unaffected.</p>
+
+<h4>8.5 No Claude-based commentary appears / falls back to structural-only scoring</h4>
+<ul>
+  <li>Confirm a Claude API key is entered under Settings → Audit Generator.</li>
+  <li>Check for an on-page warning finding stating the specific Claude API error returned.</li>
+</ul>
+
+<h2 id="sec9">9. Escalation & Support</h2>
+<p>For issues not resolved by this SOP, or for feature requests / collaboration inquiries:</p>
+<div class="contact-block">
+  <a href="mailto:mediavinescorp@gmail.com">mediavinescorp@gmail.com</a>
+</div>
+
+<h2 id="sec10">10. Change Log</h2>
+<table>
+  <tr><th>Version</th><th>Date</th><th>Change</th></tr>
+  <tr><td>1.0.0</td><td>Jul 2026</td><td>Initial release — SEO, AEO, Content, Design scoring; sequential API calls</td></tr>
+  <tr><td>1.1.0</td><td>Jul 2026</td><td>Added GEO scoring category; rebalanced weights; switched to concurrent API execution to fix timeout/hang issue; hardened site-fetch headers/error messages; added intro message and contact info to front end</td></tr>
+</table>
+
+<div class="page-footer">Website Audit Generator — Standard Operating Procedure — Mediavines Corp</div>
+
+</body>
+</html>
